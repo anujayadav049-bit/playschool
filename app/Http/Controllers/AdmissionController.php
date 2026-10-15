@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Admission;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdmissionController extends Controller {
     public function form(){ return view('admissionform'); }
@@ -21,7 +22,18 @@ class AdmissionController extends Controller {
             }
         }
 
-        Admission::create($data);
-        return back()->with('success','Admission Form Submitted Successfully!');
+        $admission = Admission::create($data);
+        return redirect()->route('admission.success', $admission->id);
+    }
+
+    public function success($id){
+        $admission = Admission::findOrFail($id);
+        return view('admission-success', compact('admission'));
+    }
+
+    public function downloadReceipt($id){
+        $admission = Admission::findOrFail($id);
+        $pdf = Pdf::loadView('receipt', compact('admission'));
+        return $pdf->download('Makoons-Receipt-'.$admission->student_name.'.pdf');
     }
 }

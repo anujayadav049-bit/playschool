@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class AdmissionAdminController extends Controller
 {
     public function dashboard()
     {
         $total = Admission::count();
-        return view('admin.dashboard', compact('total'));
+        $pending = Admission::where('status','Pending')->count();
+        $approved = Admission::where('status','Approved')->count();
+        $rejected = Admission::where('status','Rejected')->count();
+        
+        return view('admin.dashboard', compact('total','pending','approved','rejected'));
     }
 
     public function index()
@@ -35,31 +40,39 @@ class AdmissionAdminController extends Controller
     {
         $admission = Admission::findOrFail($id);
         
-        $data = $request->except(['_token']);
+        $data = $request->except(['_token', 'photo', 'birth_certificate', 'aadhaar_card', 'tc', 'admission_date', 'aadhaar_no', 'aadhaar_number']);
 
-        // Photo
-        if($request->hasFile('photo')){
-            $data['photo'] = $request->file('photo')->store('admissions','public');
-        } else {
-            unset($data['photo']);
+        $data['student_name'] = $request->student_name;
+        $data['class_apply'] = $request->class_apply;
+        $data['dob'] = $request->dob;
+        $data['gender'] = $request->gender;
+        $data['father_name'] = $request->father_name;
+        $data['mother_name'] = $request->mother_name;
+        $data['mobile'] = $request->mobile;
+        $data['email'] = $request->email;
+        $data['address'] = $request->address;
+        $data['city'] = $request->city;
+        $data['state'] = $request->state;
+        $data['pincode'] = $request->pincode;
+
+        $aadhaarValue = $request->aadhaar_no ?? $request->aadhaar_number;
+        if($aadhaarValue){
+            $data['aadhaar_no'] = $aadhaarValue;
+            $data['aadhaar_number'] = $aadhaarValue;
         }
-        // Birth Certificate
-        if($request->hasFile('birth_certificate')){
-            $data['birth_certificate'] = $request->file('birth_certificate')->store('admissions','public');
-        } else {
-            unset($data['birth_certificate']);
+
+        if($request->admission_date){
+            $data['created_at'] = $request->admission_date;
+            $data['admission_date'] = $request->admission_date;
         }
-        // Aadhaar Card
-        if($request->hasFile('aadhaar_card')){
-            $data['aadhaar_card'] = $request->file('aadhaar_card')->store('admissions','public');
-        } else {
-            unset($data['aadhaar_card']);
-        }
-        // TC
-        if($request->hasFile('tc')){
-            $data['tc'] = $request->file('tc')->store('admissions','public');
-        } else {
-            unset($data['tc']);
+
+        foreach(['photo','birth_certificate','aadhaar_card','tc'] as $fileField){
+            if($request->hasFile($fileField)){
+                if($admission->$fileField && Storage::disk('public')->exists($admission->$fileField)){
+                    Storage::disk('public')->delete($admission->$fileField);
+                }
+                $data[$fileField] = $request->file($fileField)->store('admissions','public');
+            }
         }
 
         $admission->update($data);
@@ -69,7 +82,20 @@ class AdmissionAdminController extends Controller
 
     public function destroy($id)
     {
-        Admission::findOrFail($id)->delete();
+        $admission = Admission::findOrFail($id);
+        foreach(['photo','birth_certificate','aadhaar_card','tc'] as $f){
+            if($admission->$f){
+                Storage::disk('public')->delete($admission->$f);
+            }
+        }
+        $admission->delete();
         return back()->with('success','Deleted');
+    }
+
+    public function updateStatus(Request $request, $id){
+        $admission = Admission::findOrFail($id);
+        $admission->status = $request->status;
+        $admission->save();
+        return back()->with('success','Status updated to '.$request->status);
     }
 }

@@ -24,6 +24,8 @@
 .upload-box{border:2px dashed #FFD1B8; background:#FFFBF8; border-radius:14px; padding:16px; text-align:center; cursor:pointer;}
 .upload-box:hover{border-color:#FF6B35; background:#FFF2EB;}
 .btn-submit{width:100%; height:56px; background:linear-gradient(90deg, #FF6B35, #FF8C5A); border:none; border-radius:14px; color:white; font-weight:800; font-size:16px; box-shadow:0 8px 20px rgba(255,107,53,0.3);}
+.error-msg{color:#E74C3C; font-size:11px; font-weight:700; margin-top:5px; display:none;}
+.form-control.input-error{border-color:#E74C3C!important; box-shadow:0 0 0 4px rgba(231,76,60,0.12)!important;}
 @media(max-width:768px){.form-body{padding:20px;}}
 </style>
 
@@ -51,15 +53,17 @@
 {{ session('success') }}
 </div>
 @endif
-  <form action="{{ route('admission.submit') }}" method="POST" enctype="multipart/form-data">
+  <form action="{{ route('admission.store') }}" method="POST" enctype="multipart/form-data" id="admissionForm" novalidate>
 @csrf
-    
+
     <div class="section-box">
       <div class="section-title"><i class="fa-solid fa-child"></i> Student Details</div>
       <div class="row g-3">
         <div class="col-md-7">
           <label class="form-label">Student Full Name *</label>
-          <input type="text" name="student_name" class="form-control" placeholder="Enter child name" required></div>
+          <input type="text" name="student_name" id="student_name" class="form-control" placeholder="Enter child name" required>
+          <div class="error-msg" id="err-student_name"></div>
+        </div>
         <div class="col-md-5">
           <label class="form-label">Date of Birth *</label>
           <input type="date" name="dob" class="form-control" required></div>
@@ -74,27 +78,29 @@
           <option>Nursery (3.5-4.5)</option><option>KG (4.5-5.5)</option>
           <option>Day Care</option></select></div>
 
-
-
         <div class="col-md-4">
           <label class="form-label">Aadhaar No. (12 Digit)</label>
-          <input type="text" name="aadhaar_no" class="form-control" placeholder="XXXX XXXX XXXX"></div>
+          <input type="text" name="aadhaar_no" id="aadhaar_no" class="form-control" placeholder="XXXX XXXX XXXX" maxlength="12">
+          <div class="error-msg" id="err-aadhaar_no"></div>
+        </div>
         <div class="col-md-6">
           <label class="form-label">Previous School (If any)</label>
           <input type="text" name="previous_school" class="form-control" placeholder="School name"></div>
         <div class="col-md-6">
           <label class="form-label">Student Photo *</label>
-          <input type="file" name="photo" class="form-control" accept="image/*"></div>
+          <input type="file" name="photo" id="photo" class="form-control" accept=".jpg,.jpeg,.png">
+          <div class="error-msg" id="err-photo"></div>
+        </div>
       </div>
     </div>
 
     <div class="section-box" style="background:#F8F9FF; border-color:#E0E3FF;">
       <div class="section-title" style="color:#5B6CFF;"><i class="fa-solid fa-users"></i> Parents Details</div>
       <div class="row g-3">
-        <div class="col-md-6"><label class="form-label">Father's Name *</label><input type="text" name="father_name" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">Mother's Name *</label><input type="text" name="mother_name" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">Mobile Number *</label><input type="tel" name="mobile" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">Email ID *</label><input type="email" name="email" class="form-control" required></div>
+        <div class="col-md-6"><label class="form-label">Father's Name *</label><input type="text" name="father_name" id="father_name" class="form-control" required><div class="error-msg" id="err-father_name"></div></div>
+        <div class="col-md-6"><label class="form-label">Mother's Name *</label><input type="text" name="mother_name" id="mother_name" class="form-control" required><div class="error-msg" id="err-mother_name"></div></div>
+        <div class="col-md-6"><label class="form-label">Mobile Number *</label><input type="text" name="mobile" id="mobile" class="form-control" maxlength="10" placeholder="10 digit number" required><div class="error-msg" id="err-mobile"></div></div>
+        <div class="col-md-6"><label class="form-label">Email ID *</label><input type="email" name="email" id="email" class="form-control" required><div class="error-msg" id="err-email"></div></div>
       </div>
     </div>
 
@@ -102,18 +108,18 @@
       <div class="section-title"><i class="fa-solid fa-location-dot"></i> Permanent Address</div>
       <div class="row g-3">
         <div class="col-12"><label class="form-label">Full Address *</label><input type="text" name="address" class="form-control" required></div>
-        <div class="col-md-4"><label class="form-label">City *</label><input type="text" name="city" class="form-control" value="Greater Noida" required></div>
+        <div class="col-md-4"><label class="form-label">City *</label><input type="text" name="city" id="city" class="form-control" value="Greater Noida" required><div class="error-msg" id="err-city"></div></div>
         <div class="col-md-4"><label class="form-label">State *</label><select name="state" class="form-select"><option>Haryana</option><option>Delhi</option><option>Uttar Pradesh</option><option>Rajasthan</option></select></div>
-        <div class="col-md-4"><label class="form-label">PIN Code *</label><input type="text" name="pincode" class="form-control" required></div>
+        <div class="col-md-4"><label class="form-label">PIN Code *</label><input type="text" name="pincode" id="pincode" class="form-control" maxlength="6" required><div class="error-msg" id="err-pincode"></div></div>
       </div>
     </div>
 
     <div class="section-box" style="background:#F6FFF8; border-color:#C8F0D0;">
       <div class="section-title" style="color:#27AE60;"><i class="fa-solid fa-cloud-arrow-up"></i> Documents Upload</div>
       <div class="row g-3">
-        <div class="col-md-4"><label class="form-label">Birth Certificate *</label><div class="upload-box"><i class="fa-solid fa-file-pdf"></i><div style="font-size:12px; font-weight:700; margin-top:6px;">Choose File</div><input type="file" name="birth_certificate" hidden></div></div>
-        <div class="col-md-4"><label class="form-label">Aadhaar Card *</label><div class="upload-box"><i class="fa-solid fa-id-card"></i><div style="font-size:12px; font-weight:700; margin-top:6px;">Choose File</div><input type="file" name="aadhaar_card" hidden></div></div>
-        <div class="col-md-4"><label class="form-label">Transfer Cert. / Other</label><div class="upload-box"><i class="fa-solid fa-file-lines"></i><div style="font-size:12px; font-weight:700; margin-top:6px;">Choose File</div><input type="file" name="tc" hidden></div></div>
+        <div class="col-md-4"><label class="form-label">Birth Certificate *</label><div class="upload-box" data-input="birth_certificate"><i class="fa-solid fa-file-pdf"></i><div style="font-size:12px; font-weight:700; margin-top:6px;">Choose File</div><input type="file" name="birth_certificate" id="birth_certificate" hidden accept=".pdf,.jpg,.jpeg,.png"></div><div class="error-msg" id="err-birth_certificate"></div></div>
+        <div class="col-md-4"><label class="form-label">Aadhaar Card *</label><div class="upload-box" data-input="aadhaar_card"><i class="fa-solid fa-id-card"></i><div style="font-size:12px; font-weight:700; margin-top:6px;">Choose File</div><input type="file" name="aadhaar_card" id="aadhaar_card" hidden accept=".pdf,.jpg,.jpeg,.png"></div><div class="error-msg" id="err-aadhaar_card"></div></div>
+        <div class="col-md-4"><label class="form-label">Transfer Cert. / Other</label><div class="upload-box" data-input="tc"><i class="fa-solid fa-file-lines"></i><div style="font-size:12px; font-weight:700; margin-top:6px;">Choose File</div><input type="file" name="tc" id="tc" hidden accept=".pdf,.jpg,.jpeg,.png"></div><div class="error-msg" id="err-tc"></div></div>
       </div>
       <p style="font-size:11px; color:#888; margin-top:10px;">Accepted: PDF, JPG, PNG - Max 5MB each</p>
     </div>
@@ -129,22 +135,115 @@
 </div>
 
 <script>
+// --- REAL-TIME INPUT RESTRICTIONS ---
+function onlyAlpha(inputId){
+  const el = document.getElementById(inputId);
+  if(!el) return;
+  el.addEventListener('input', function(){
+    this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+  });
+}
+function onlyNumber(inputId, maxLen){
+  const el = document.getElementById(inputId);
+  if(!el) return;
+  el.addEventListener('input', function(){
+    this.value = this.value.replace(/[^0-9]/g, '').slice(0,maxLen);
+  });
+}
+onlyAlpha('student_name');
+onlyAlpha('father_name');
+onlyAlpha('mother_name');
+onlyAlpha('city');
+onlyNumber('mobile', 10);
+onlyNumber('aadhaar_no', 12);
+onlyNumber('pincode', 6);
+
+// --- ERROR HELPERS ---
+function showErr(id, msg){
+  const err = document.getElementById('err-'+id);
+  const inp = document.getElementById(id);
+  if(err){ err.innerText = msg; err.style.display='block'; }
+  if(inp){ inp.classList.add('input-error'); }
+}
+function clearErr(id){
+  const err = document.getElementById('err-'+id);
+  const inp = document.getElementById(id);
+  if(err){ err.style.display='none'; }
+  if(inp){ inp.classList.remove('input-error'); }
+}
+document.querySelectorAll('.form-control').forEach(i=>{
+  i.addEventListener('input', ()=> clearErr(i.id));
+});
+
+// --- UPLOAD BOX CLICK + FILE VALIDATION ---
 document.querySelectorAll('.upload-box').forEach(box=>{
   let input = box.querySelector('input');
   box.addEventListener('click', ()=> input.click());
   input.addEventListener('change', function(){
+    clearErr(this.id);
     if(this.files[0]){
+      let file = this.files[0];
+      let validTypes = ['application/pdf','image/jpeg','image/jpg','image/png'];
+      if(!validTypes.includes(file.type)){
+        showErr(this.id, 'Sirf PDF, JPG, PNG allowed hai');
+        this.value=''; return;
+      }
+      if(file.size > 5*1024*1024){
+        showErr(this.id, 'File 5MB se kam honi chahiye');
+        this.value=''; return;
+      }
+      box.querySelectorAll('div.file-name').forEach(e=>e.remove());
       let nameDiv = document.createElement('div');
-      nameDiv.style.cssText = 'font-size:12px; font-weight:700; margin-top:6px; color:#27AE60;';
-      nameDiv.innerHTML = '<i class="fa-solid fa-check" style="color:#27AE60"></i> ' + this.files[0].name.substring(0,20);
-      // purana text hatao, input ko rehne do
-      box.querySelectorAll('div, i').forEach(el=>{ if(!el.contains(input)) el.remove(); });
-      // agar pehle se naam hai to hatao
-      let old = box.querySelector('.file-name'); if(old) old.remove();
-      nameDiv.classList.add('file-name');
+      nameDiv.className='file-name';
+      nameDiv.style.cssText='font-size:12px; font-weight:700; margin-top:6px; color:#27AE60;';
+      nameDiv.innerHTML='<i class="fa-solid fa-check"></i> '+file.name.substring(0,22);
       box.appendChild(nameDiv);
     }
   });
+});
+
+// Photo separate validation (2MB)
+document.getElementById('photo')?.addEventListener('change', function(){
+  clearErr('photo');
+  if(this.files[0]){
+    let file=this.files[0];
+    if(!['image/jpeg','image/jpg','image/png'].includes(file.type)){
+      showErr('photo','Photo sirf JPG/PNG me hona chahiye'); this.value=''; return;
+    }
+    if(file.size > 2*1024*1024){ showErr('photo','Photo 2MB se kam honi chahiye'); this.value=''; return; }
+  }
+});
+
+// --- FINAL SUBMIT VALIDATION ---
+document.getElementById('admissionForm').addEventListener('submit', function(e){
+  let valid = true;
+  // clear all
+  document.querySelectorAll('.error-msg').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.input-error').forEach(el=>el.classList.remove('input-error'));
+
+  let student_name = document.getElementById('student_name').value.trim();
+  let father_name = document.getElementById('father_name').value.trim();
+  let mother_name = document.getElementById('mother_name').value.trim();
+  let mobile = document.getElementById('mobile').value.trim();
+  let email = document.getElementById('email').value.trim();
+  let aadhaar = document.getElementById('aadhaar_no').value.trim();
+  let pincode = document.getElementById('pincode').value.trim();
+  let city = document.getElementById('city').value.trim();
+
+  if(student_name.length < 3){ showErr('student_name','Kam se kam 3 letters likho'); valid=false; }
+  if(father_name.length < 3){ showErr('father_name','Father name sahi likho'); valid=false; }
+  if(mother_name.length < 3){ showErr('mother_name','Mother name sahi likho'); valid=false; }
+  if(city.length < 2){ showErr('city','City me sirf alphabets'); valid=false; }
+
+  if(!/^[6-9][0-9]{9}$/.test(mobile)){ showErr('mobile','10 digit sahi mobile number dalo (6-9 se start)'); valid=false; }
+
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showErr('email','Sahi Email ID dalo'); valid=false; }
+
+  if(aadhaar && aadhaar.length!==12){ showErr('aadhaar_no','Aadhaar 12 digit ka hona chahiye'); valid=false; }
+
+  if(!/^[0-9]{6}$/.test(pincode)){ showErr('pincode','Pincode 6 digit ka hona chahiye'); valid=false; }
+
+  if(!valid){ e.preventDefault(); window.scrollTo({top:200, behavior:'smooth'}); }
 });
 </script>
 

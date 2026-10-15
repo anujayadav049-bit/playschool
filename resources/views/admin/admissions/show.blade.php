@@ -15,38 +15,59 @@
     <a href="{{ route('admin.admissions') }}" class="inline-flex items-center bg-white border px-4 py-2 rounded-xl text-sm mb-4 shadow-sm"><i class="fa-solid fa-arrow-left mr-2"></i>Back</a>
 
     <div class="bg-white rounded-[20px] border shadow-sm overflow-hidden">
-        <!-- HEADER - Chhota Photo Left -->
+        <!-- HEADER -->
         <div class="bg-gradient-to-r from-orange-500 to-orange-500 p-5 flex items-center gap-4">
             <img src="{{ fileUrl($d->photo) }}" class="w-16 h-16 rounded-xl object-cover border-2 border-white bg-white" onerror="this.src='https://ui-avatars.com/api/?name={{ $d->student_name }}'">
             <div class="flex-1">
-                <h1 class="text-white text-xl font-bold">{{ $d->student_name }}</h1>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-white text-xl font-bold">{{ $d->student_name }}</h1>
+                    @if(($d->status??'Pending') == 'Approved')
+                        <span class="bg-white text-green-600 text-[10px] px-2.5 py-1 rounded-full font-bold">✓ APPROVED</span>
+                    @elseif(($d->status??'Pending') == 'Rejected')
+                        <span class="bg-white text-red-600 text-[10px] px-2.5 py-1 rounded-full font-bold">✕ REJECTED</span>
+                    @else
+                        <span class="bg-yellow-300 text-yellow-800 text-[10px] px-2.5 py-1 rounded-full font-bold">⏳ PENDING</span>
+                    @endif
+                </div>
                 <p class="text-orange-100 text-sm">Class: {{ $d->class_apply }} | ID #{{ $d->id }}</p>
             </div>
             <a href="{{ fileUrl($d->photo) }}" target="_blank" class="bg-white/20 text-white text-[11px] px-3 py-1.5 rounded-full font-bold border border-white/30">View Photo</a>
         </div>
 
         <div class="p-6">
-            <!-- 1. STUDENT DETAILS - Email hata diya -->
+
+            <!-- STATUS ACTION BAR -->
+            <div class="bg-gray-50 border rounded-xl p-3 flex items-center justify-between mb-6">
+                <span class="text-[11px] font-bold text-gray-500 uppercase"><i class="fa-solid fa-bolt mr-1 text-orange-500"></i> Quick Status Update</span>
+                <form action="{{ route('admin.status', $d->id) }}" method="POST" class="flex gap-2">
+                    @csrf
+                    <button name="status" value="Approved" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-check mr-1"></i> Approve</button>
+                    <button name="status" value="Rejected" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-xmark mr-1"></i> Reject</button>
+                    <button name="status" value="Pending" class="bg-white border hover:bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-xs font-bold">Pending</button>
+                </form>
+            </div>
+
+            <!-- 1. STUDENT DETAILS -->
             <h3 class="text-[13px] font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-user text-orange-500"></i> Student Details</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6 text-[13px]">
                 <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Student Name</span><b>{{ $d->student_name }}</b></div>
                 <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Class Apply For</span><b class="text-blue-600">{{ $d->class_apply }}</b></div>
-                <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Date of Birth</span><b>{{ $d->dob?? $d->date_of_birth?? '2024-01-17' }}</b></div>
+                <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Date of Birth</span><b>{{ $d->dob?? $d->date_of_birth?? 'N/A' }}</b></div>
                 <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Gender</span><b>{{ $d->gender }}</b></div>
                 <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Aadhaar Number</span><b>{{ $d->aadhaar_number?? $d->aadhaar_no?? 'N/A' }}</b></div>
                 <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Previous School</span><b>{{ $d->previous_school?? 'N/A' }}</b></div>
             </div>
 
-            <!-- 2. PARENTS DETAILS - Yaha Email + Mobile -->
+            <!-- 2. PARENTS DETAILS -->
             <h3 class="text-[13px] font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-users text-blue-500"></i> Parents Details</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6 text-[13px]">
-                <div class="border rounded-lg p-3 bg-blue-50/30"><span class="text-[10px] text-blue-400 font-bold uppercase block">Father Name</span><b>{{ $d->father_name?? $d->father?? 'ramesh' }}</b></div>
+                <div class="border rounded-lg p-3 bg-blue-50/30"><span class="text-[10px] text-blue-400 font-bold uppercase block">Father Name</span><b>{{ $d->father_name?? $d->father?? 'N/A' }}</b></div>
                 <div class="border rounded-lg p-3 bg-pink-50/50"><span class="text-[10px] text-pink-400 font-bold uppercase block">Mother Name</span><b>{{ $d->mother_name?? $d->mother?? 'N/A' }}</b></div>
                 <div class="border rounded-lg p-3 bg-green-50/50"><span class="text-[10px] text-green-600 font-bold uppercase block">Mobile Number</span><b><i class="fa-solid fa-phone text-green-500 mr-1"></i>{{ $d->mobile?? $d->parent_mobile }}</b></div>
                 <div class="border rounded-lg p-3 bg-gray-50/50 md:col-span-3"><span class="text-[10px] text-gray-400 font-bold uppercase block">Parents Email ID</span><b>{{ $d->parent_email?? $d->father_email?? $d->email }}</b></div>
             </div>
 
-            <!-- 3. ADDRESS DETAILS - Ye sahi hai -->
+            <!-- 3. ADDRESS DETAILS -->
             <h3 class="text-[13px] font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-location-dot text-green-600"></i> Address Details</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6 text-[13px]">
                 <div class="border rounded-lg p-3 bg-gray-50/50 md:col-span-3"><span class="text-[10px] text-gray-400 font-bold uppercase block">Full Address</span><b>{{ $d->address }}</b></div>
@@ -56,7 +77,7 @@
                 <div class="border rounded-lg p-3 bg-gray-50/50"><span class="text-[10px] text-gray-400 font-bold uppercase block">Admission Date</span><b>{{ $d->created_at->format('d M Y') }}</b></div>
             </div>
 
-            <!-- 4. DOCUMENTS - Sirf Button, Naam hata diya -->
+            <!-- 4. DOCUMENTS -->
             <h3 class="text-[13px] font-bold text-gray-800 mb-3 flex items-center gap-2"><i class="fa-solid fa-folder text-purple-600"></i> Documents</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div class="border rounded-xl p-4 bg-blue-50/50 text-center">

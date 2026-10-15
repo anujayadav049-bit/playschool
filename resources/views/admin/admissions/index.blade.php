@@ -30,6 +30,12 @@
             <h2 class="text-2xl font-bold text-gray-800">Student Admissions</h2>
             <p class="text-sm text-gray-500">Total students: <span class="font-bold text-orange-500">{{ count($data) }}</span></p>
         </div>
+        <div class="flex gap-2">
+            <button onclick="filterStatus('all')" class="filter-btn bg-gray-900 text-white px-3 py-2 rounded-lg text-xs font-bold" data-filter="all">All</button>
+            <button onclick="filterStatus('Pending')" class="filter-btn bg-yellow-100 text-yellow-700 px-3 py-2 rounded-lg text-xs font-bold" data-filter="Pending">Pending</button>
+            <button onclick="filterStatus('Approved')" class="filter-btn bg-green-100 text-green-700 px-3 py-2 rounded-lg text-xs font-bold" data-filter="Approved">Approved</button>
+            <button onclick="filterStatus('Rejected')" class="filter-btn bg-red-100 text-red-700 px-3 py-2 rounded-lg text-xs font-bold" data-filter="Rejected">Rejected</button>
+        </div>
         <div class="relative w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
             <input type="text" id="searchInput" placeholder="Search student..." class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500">
@@ -44,12 +50,13 @@
                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Student</th>
                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Class</th>
                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Mobile</th>
+                    <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
                     <th class="px-6 py-4 text-xs font-semibold text-gray-500 uppercase text-center">Action</th>
                 </tr>
             </thead>
             <tbody id="admissionTable" class="divide-y">
                 @foreach($data as $row)
-                <tr class="hover:bg-orange-50/50 transition">
+                <tr class="hover:bg-orange-50/50 transition" data-status="{{ $row->status??'Pending' }}">
                     <td class="px-6 py-4 font-bold text-sm">#{{ $row->id }}</td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
@@ -59,6 +66,15 @@
                     </td>
                     <td class="px-6 py-4"><span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold border">{{ $row->class_apply }}</span></td>
                     <td class="px-6 py-4 text-sm font-medium">{{ $row->mobile }}</td>
+                    <td class="px-6 py-4">
+                        @if(($row->status??'Pending') == 'Approved')
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[11px] font-bold border border-green-200"><i class="fa-solid fa-check mr-1"></i>Approved</span>
+                        @elseif(($row->status??'Pending') == 'Rejected')
+                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[11px] font-bold border border-red-200"><i class="fa-solid fa-xmark mr-1"></i>Rejected</span>
+                        @else
+                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-[11px] font-bold border border-yellow-200"><i class="fa-solid fa-clock mr-1"></i>Pending</span>
+                        @endif
+                    </td>
                     <td class="px-6 py-4">
                         <div class="flex justify-center gap-2">
                             <a href="{{route('admin.show',$row->id)}}" class="w-8 h-8 bg-blue-500 hover:bg-blue-600 text-white rounded-lg flex items-center justify-center text-xs"><i class="fa-solid fa-eye"></i></a>
@@ -74,12 +90,26 @@
 </div>
 
 <script>
-document.getElementById('searchInput').addEventListener('keyup', function() {
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('keyup', function() {
     let filter = this.value.toLowerCase();
     document.querySelectorAll('#admissionTable tr').forEach(row => {
-        row.style.display = row.innerText.toLowerCase().includes(filter) ? '' : 'none';
+        row.style.display = row.innerText.toLowerCase().includes(filter)? '' : 'none';
     });
 });
+
+function filterStatus(status){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('ring-2','ring-offset-1'));
+    document.querySelector(`[data-filter="${status}"]`).classList.add('ring-2','ring-offset-1');
+
+    document.querySelectorAll('#admissionTable tr').forEach(row => {
+        if(status === 'all'){
+            row.style.display = '';
+        } else {
+            row.style.display = row.getAttribute('data-status') === status? '' : 'none';
+        }
+    });
+}
 </script>
 </body>
 </html>

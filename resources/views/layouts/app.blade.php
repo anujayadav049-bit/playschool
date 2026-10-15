@@ -104,50 +104,48 @@
             </div>
         </div>
         <div class="offcanvas__overlay"></div>
-
-        <!-- Header Section Start -->
-        <header id="header-sticky" class="header-1 header-2">
-            <div class="container">
-                <div class="mega-menu-wrapper">
-                    <div class="header-main">
-                        <div class="header-left">
-                            <a href="{{ url('/') }}" class="header-logo">
-                                <img src="{{ asset('assets/img/logo/logo1.webp') }}" alt="
-                                Play School" style="height: 52px; width: auto; max-width: 220px; background: white; padding: 5px 10px; border-radius: 8px; object-fit: contain;">
-                            </a>
-                        </div>
-                        <div class="mean__menu-wrapper">
-                            <div class="main-menu">
-                                <nav id="mobile-menu">
-                                    <ul>
-                                        <li><a href="{{ url('/') }}">Home</a></li>
-                                        <li><a href="{{ url('/about') }}">About Us</a></li>
-                                        <li><a href="{{ url('/program') }}">Programs</a></li>
-                                        <li><a href="{{ url('/activities') }}">Activities</a></li>
-                                        <li><a href="{{ url('/gallery') }}">Gallery</a></li>
-                                        <li><a href="{{ url('/admissions') }}">Admission</a></li>
-                                        <li><a href="{{ url('/contact') }}">Contact Us</a></li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                       <div class="header-right d-flex justify-content-end align-items-center" style="gap:10px;">
-  <a href="{{ url('/admissionform') }}" class="theme-btn" style="display:inline-flex !important; align-items:center !important; justify-content:center !important; height:48px; padding:0 20px !important; line-height:1 !important;">Admission Open <i class="icon-arrow-icon" style="margin-left:6px;"></i></a>
-
-    @if(session()->has('admin_id'))
-        <a href="{{ route('admin.dashboard') }}" class="theme-btn" style="background:#16a34a !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; height:48px; padding:0 20px !important; line-height:1 !important;">Dashboard <i class="icon-arrow-icon" style="margin-left:6px;"></i></a>
-    @else
-        <a href="{{ route('admin.login') }}" class="theme-btn" style="display:inline-flex !important; align-items:center !important; justify-content:center !important; height:48px; padding:0 20px !important; line-height:1 !important;">Admin Login <i class="fas fa-lock" style="margin-left:6px; font-size:12px;"></i></a>
-    @endif
-
-  
-    <div class="header__hamburger my-auto d-xl-none"><div class="sidebar__toggle"><i class="fal fa-bars"></i></div></div>
-</div>
+<header id="header-sticky" class="header-1 header-2">
+    <div class="container">
+        <div class="mega-menu-wrapper">
+            <div class="header-main">
+                <div class="header-left">
+                    <a href="{{ url('/') }}" class="header-logo">
+                        <img src="{{ asset('assets/img/logo/logo1.webp') }}" alt="Play School" style="height: 52px; width: auto; max-width: 220px; background: white; padding: 5px 10px; border-radius: 8px; object-fit: contain;">
+                    </a>
+                </div>
+                <div class="mean__menu-wrapper">
+                    <div class="main-menu">
+                        <nav id="mobile-menu">
+                            <ul>
+                                <li><a href="{{ url('/') }}">Home</a></li>
+                                <li><a href="{{ url('/about') }}">About Us</a></li>
+                                <li><a href="{{ url('/program') }}">Programs</a></li>
+                                <li><a href="{{ url('/activities') }}">Activities</a></li>
+                                <li><a href="{{ url('/admissions') }}">Admission</a></li>
+                                <li><a href="{{ url('/gallery') }}">Gallery</a></li>
+                                <li><a href="{{ url('/contact') }}">Contact Us</a></li>
+                                <!-- Student Form ko menu se hata diya -->
+                            </ul>
+                        </nav>
                     </div>
                 </div>
-            </div>
-        </header>
+                <div class="header-right d-flex justify-content-end align-items-center" style="gap:8px;">
 
+                 
+                    <a href="{{ url('/admissionform') }}" class="theme-btn" style="display:inline-flex !important; align-items:center !important; justify-content:center !important; height:48px; padding:0 20px !important; line-height:1 !important;">Admission Open <i class="icon-arrow-icon" style="margin-left:6px;"></i></a>
+
+                    @if(session()->has('admin_id'))
+                        <a href="{{ route('admin.dashboard') }}" class="theme-btn" style="background:#16a34a !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; height:48px; padding:0 20px !important; line-height:1 !important;">Dashboard <i class="icon-arrow-icon" style="margin-left:6px;"></i></a>
+                    @else
+                        <a href="{{ route('admin.login') }}" class="theme-btn" style="display:inline-flex !important; align-items:center !important; justify-content:center !important; height:48px; padding:0 20px !important; line-height:1 !important;">Admin Login <i class="fas fa-lock" style="margin-left:6px; font-size:12px;"></i></a>
+                    @endif
+
+                    <div class="header__hamburger my-auto d-xl-none"><div class="sidebar__toggle"><i class="fal fa-bars"></i></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
 
         
