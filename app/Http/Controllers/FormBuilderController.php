@@ -35,6 +35,8 @@ class FormBuilderController extends Controller
                 'is_required' => isset($f['required']) || isset($f['is_required']) ? 1 : 0,
                 'sort_order' => $i
             ]);
+
+            
         }
 
        return redirect()->route('form-builder.create')->with('success','Form "'.$form->name.'" created successfully!');

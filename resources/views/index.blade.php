@@ -2,22 +2,19 @@
 
 @section('content')
 
-<!-- Hero Section Start -->
+<!-- Hero Section Start - FINAL DYNAMIC -->
 <section class="hero-section-2 fix">
     <div class="bg-shape"><img src="{{ asset('assets/img/hero/hero-slider-shape.png') }}" alt=""></div>
     <div class="hero-array-button">
-        <div class="array-prev">
-            <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.8398 29.6567C23.626 27.917 22.1748 26.036 21.0942 24.5148C20.2646 23.3457 19.2767 22.2974 18.1587 21.4C17.3819 20.8208 16.6367 20.2005 15.9262 19.5416C22.2698 19.6164 36.1529 19.9809 42.6806 20.298C46.7941 20.5949 47.5066 19.0773 47.585 17.9943C47.4187 15.6905 46.496 13.4426 43.7671 13.1243C39.4708 12.622 35.672 12.4332 31.2283 12.3346C26.457 12.2278 19.8853 12.1019 15.4666 11.8406C17.0911 10.703 19.5267 9.40151 21.2308 8.39332C22.1071 7.87439 24.8443 6.74033 25.4179 5.01726C25.938 3.45451 25.0711 -0.167363 23.0346 0.00601177C20.1062 0.257762 15.4797 3.36189 12.6107 4.72395C8.68721 6.73557 4.34571 8.43726 1.16796 11.5639C0.295151 12.6054 -0.403103 14.148 0.267834 15.4126C1.21783 17.2058 5.89302 21.305 7.33821 22.5032C10.1835 24.8628 13.5571 28.0322 16.6684 30.5117C19.0196 32.3868 22.1463 31.1909 22.8398 29.6567Z" fill="white"/></svg>
-        </div>
-        <div class="array-next">
-            <svg width="48" height="32" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24.7451 29.6567C23.959 27.917 25.4101 26.036 26.4907 24.5148C27.3203 23.3457 28.3083 22.2974 29.4262 21.4C30.2031 20.8208 30.9483 20.2005 31.6588 19.5416C25.3151 19.6164 11.4321 19.9809 4.90438 20.298C0.790875 20.5949 0.078375 19.0773 0 17.9943C0.16625 15.6905 1.08894 13.4426 3.81781 13.1243C8.11419 12.622 11.913 12.4332 16.3566 12.3346C21.128 12.2278 27.6996 12.1019 32.1183 11.8406C30.4938 10.703 28.0583 9.40151 26.3542 8.39332C25.4778 7.87439 22.7406 6.74033 22.1671 5.01726C21.6469 3.45451 22.5138 -0.167363 24.5504 0.00601177C27.4788 0.257762 32.1053 3.36189 34.9743 4.72395C38.8978 6.73557 43.2392 8.43726 46.417 11.5639C47.2898 12.6054 47.9881 14.148 47.3171 15.4126C46.3671 17.2058 41.6919 21.305 40.2467 22.5032C37.4015 24.8628 34.0278 28.0322 30.9166 30.5117C28.5653 32.3868 25.4386 31.1909 24.7451 29.6567Z" fill="white"/></svg>
-        </div>
+        <div class="array-prev"><i class="fas fa-chevron-left"></i></div>
+        <div class="array-next"><i class="fas fa-chevron-right"></i></div>
     </div>
    <div class="swiper banner-active">
         <div class="swiper-wrapper">
+            <!-- SLIDE 1 - DYNAMIC -->
             <div class="swiper-slide">
                 <div class="hero-2">
-                        <div class="hero-bg bg-cover" style="background-image: url('{{ asset('assets/img/hero/hero-slider-1.jpg') }}');"></div>
+                        <div class="hero-bg bg-cover" style="background-image: url('@if(!empty($homeSetting->banner_image)) {{ asset('storage/'.$homeSetting->banner_image) }} @else {{ asset('assets/img/hero/hero-slider-1.jpg') }} @endif');"></div>
                         <div class="vec-1"><img src="{{ asset('assets/img/hero/vec.png') }}" alt="img"></div>
                         <div class="vec-2"><img src="{{ asset('assets/img/hero/vec-2.png') }}" alt="img"></div>
                         <div class="vec-3"><img src="{{ asset('assets/img/hero/vec-3.png') }}" alt="img"></div>
@@ -26,15 +23,22 @@
                                 <div class="shape-1"><img src="{{ asset('assets/img/hero/shape1.png') }}" alt="img"></div>
                                 <div class="shape-2"><img src="{{ asset('assets/img/hero/shape2.png') }}" alt="img"></div>
                                 <div class="shape-3"><img src="{{ asset('assets/img/hero/shape3.png') }}" alt="img"></div>
-                                <div class="content"><div class="icon"><img src="{{ asset('assets/img/hero/icon1.png') }}" alt=""></div><h1>Where Learning Feels Like Play</h1></div>
+                                <div class="content">
+                                    <div class="icon"><img src="{{ asset('assets/img/hero/icon1.png') }}" alt=""></div>
+                                    <h1>{{ $homeSetting->banner_title ?? 'Where Learning Feels Like Play' }}</h1>
+                                    @if(!empty($homeSetting->banner_subtitle))
+                                        <p style="color:#fff; margin-top:10px; font-size:20px;">{{ $homeSetting->banner_subtitle }}</p>
+                                    @endif
+                                </div>
                                 <div class="hero-button"><a href="{{ url('/admissions') }}" class="theme-btn">Online Admission <i class="icon-arrow-icon"></i></a></div>
                             </div>
                         </div>
                 </div>
             </div>
+            <!-- SLIDE 2 - SAME DATA -->
             <div class="swiper-slide">
                 <div class="hero-2">
-                        <div class="hero-bg bg-cover" style="background-image: url('{{ asset('assets/img/hero/hero-slider-2.jpg') }}');"></div>
+                        <div class="hero-bg bg-cover" style="background-image: url('@if(!empty($homeSetting->banner_image)) {{ asset('storage/'.$homeSetting->banner_image) }} @else {{ asset('assets/img/hero/hero-slider-2.jpg') }} @endif');"></div>
                         <div class="vec-1"><img src="{{ asset('assets/img/hero/vec.png') }}" alt="img"></div>
                         <div class="vec-2"><img src="{{ asset('assets/img/hero/vec-2.png') }}" alt="img"></div>
                         <div class="vec-3"><img src="{{ asset('assets/img/hero/vec-3.png') }}" alt="img"></div>
@@ -43,7 +47,13 @@
                                 <div class="shape-1"><img src="{{ asset('assets/img/hero/shape1.png') }}" alt="img"></div>
                                 <div class="shape-2"><img src="{{ asset('assets/img/hero/shape2.png') }}" alt="img"></div>
                                 <div class="shape-3"><img src="{{ asset('assets/img/hero/shape3.png') }}" alt="img"></div>
-                                <div class="content"><div class="icon"><img src="{{ asset('assets/img/hero/icon1.png') }}" alt=""></div><h1>Where Learning Feels Like Play</h1></div>
+                                <div class="content">
+                                    <div class="icon"><img src="{{ asset('assets/img/hero/icon1.png') }}" alt=""></div>
+                                    <h1>{{ $homeSetting->banner_title ?? 'Where Learning Feels Like Play' }}</h1>
+                                    @if(!empty($homeSetting->banner_subtitle))
+                                        <p style="color:#fff; margin-top:10px; font-size:20px;">{{ $homeSetting->banner_subtitle }}</p>
+                                    @endif
+                                </div>
                                 <div class="hero-button"><a href="{{ url('/admissions') }}" class="theme-btn">Online Admission <i class="icon-arrow-icon"></i></a></div>
                             </div>
                         </div>
@@ -51,11 +61,6 @@
             </div>
         </div>
    </div>
-   <div class="text-circle-box">
-        <img src="{{ asset('assets/img/hero/circle.png') }}" alt="img">
-        <div class="circle-text"><img src="{{ asset('assets/img/hero/text-circle.png') }}" alt="img"></div>
-        <a class="video-popup" href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I"><i class="fas fa-play"></i></a>
-    </div>
 </section>
 
 <!-- Work Process -->
@@ -88,7 +93,7 @@
     </div>                 
 </div> 
 
-<!-- About Section -->
+<!-- About Section - DYNAMIC -->
 <section class="about-section-two section-padding fix">
     <div class="love-shape float-bob-x"><img src="{{ asset('assets/img/about/love.png') }}" alt="shape-img"></div>
     <div class="container">
@@ -98,20 +103,19 @@
                     <div class="about-image-two">
                         <img src="{{ asset('assets/img/about/about-2.png') }}" alt="about-image" class="wow zoomIn" data-wow-delay=".4s">
                         <div class="img-two img-custom-anim-bottom"><img src="{{ asset('assets/img/about/about-3.png') }}" alt="about-image"></div>
-                        <div class="perasute-shape"><img src="{{ asset('assets/img/about/perasute.png') }}" alt="shape-image"></div>
                     </div>
                 </div>
                 <div class="col-xl-6 col-lg-6">
                     <div class="about-content-two">
-                        <div class="section-title"><span class="sub-title wow fadeInUp" data-wow-delay=".3s">About Us</span><h2 class="char-animation">Safe, Fun & <span>Educational</span> – A Second Home For Your Child</h2></div>
-                        <p class="wow fadeInUp mt-3 mt-md-0" data-wow-delay=".3s">At Play School Day Care and Play School, Greater Noida, we provide a secure, hygienic and joyful environment where children from 1.5 years onwards learn, play and grow with confidence. Trusted by working parents.</p>
-                        <div class="icon-box-items">
-                            <div class="icon-item wow fadeInUp" data-wow-delay=".5s"><div class="icon"><img src="{{ asset('assets/img/about/icon1.svg') }}" alt="icon-image"></div><div class="content"><h3 class="mb-2">Early Learning Program</h3><p>Play-based learning with phonics, numbers, rhymes, storytelling and sensory activities to build strong foundation for big school.</p></div></div>
-                            <div class="icon-item wow fadeInUp" data-wow-delay=".7s"><div class="icon style-2"><img src="{{ asset('assets/img/about/icon2.svg') }}" alt="icon-image"></div><div class="content"><h4 class="mb-2">Loving & Trained Staff</h4><p>Our caring female teachers and didis are trained in child care, hygiene and safety, giving mother-like love to every child.</p></div></div>
+                        <div class="section-title">
+                            <span class="sub-title wow fadeInUp">About Us</span>
+                            <h2 class="char-animation">{{ $homeSetting->about_title ?? 'Safe, Fun & Educational – A Second Home For Your Child' }}</h2>
                         </div>
+                        <p class="wow fadeInUp mt-3 mt-md-0">
+                            {{ $homeSetting->about_description ?? 'At Play School Day Care and Play School, Greater Noida, we provide a secure, hygienic and joyful environment where children from 1.5 years onwards learn, play and grow with confidence. Trusted by working parents.' }}
+                        </p>
                         <div class="about-two-button wow fadeInUp" data-wow-delay=".8s">
                             <a href="{{ url('/about') }}" class="theme-btn">Admission Open <i class="icon-arrow-icon"></i></a>
-                            <div class="wave-area"><div class="promo-video"><div class="waves-block"><div class="waves wave-1"></div><div class="waves wave-2"></div><div class="waves wave-3"></div></div><a class="video-popup" href="https://www.youtube.com/watch?v=Cn4G2lZ_g2I"><i class="fas fa-play"></i></a></div><p class="video-text">Watch Our School</p></div>
                         </div>
                     </div>
                 </div>

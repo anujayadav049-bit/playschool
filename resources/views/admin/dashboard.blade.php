@@ -11,10 +11,9 @@
 <div class="flex min-h-screen">
 
   <!-- LEFT SIDE - SIDER MENU -->
-  <div class="w-[270px] bg-white border-r-2 border-orange-100 p-4 fixed h-screen">
+  <div class="w-[270px] bg-white border-r-2 border-orange-100 p-4 fixed h-screen overflow-y-auto">
     <div class="mb-6">
       <img src="{{ asset('assets/img/logo/logo1.webp') }}" style="height:40px">
-      <p class="text-[10px] font-bold tracking-widest text-gray-400 mt-2">ADMIN PANEL</p>
     </div>
 
     <div class="space-y-2">
@@ -37,9 +36,29 @@
       <a href="{{ url('/admin/admissions?status=pending') }}" class="block bg-white border px-4 py-3 rounded-xl font-semibold text-[13px]">
         👁️ Pending Review <span class="float-right font-extrabold text-lg">1</span>
       </a>
+
+      
+
+      <!-- ===== ALL WEBSITE PAGES - NEW ADDED ===== -->
+      <div class="pt-3 mt-3 border-t-2 border-orange-100">
+        <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-2 mb-2">📄 All Website Pages</p>
+        <a href="{{ route('admin.home.settings.index') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50">🏠 Home Page Settings<span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ route('admin.pages.index','about') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50">👨‍👩‍👧‍👦 About Us <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ route('admin.pages.index','program') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📚 Program <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ route('admin.pages.index','activities') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎨 Activities <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ route('admin.pages.index','gallery') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🖼️ Gallery <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ route('admin.pages.index','admissions') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎓 Admissions <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ route('admin.pages.index','contact') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📞 Contact Us <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ route('admin.pages.index','faq') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">❓ FAQ <span class="float-right text-[10px]">↗</span></a>
+      </div>
+      <!-- ===== END PAGES ===== -->
+
+
+
+
     </div>
 
-    <div class="absolute bottom-4 left-4 right-4 space-y-2">
+    <div class="mt-8 space-y-2">
       <a href="{{ url('/') }}" class="block text-center bg-white border-2 py-2 rounded-full text-[12px] font-bold">← Back to Home</a>
       <a href="{{ url('/admin/logout') }}" class="block text-center bg-red-500 text-white py-2 rounded-full text-[12px] font-bold">Logout</a>
     </div>
@@ -48,7 +67,7 @@
   <!-- RIGHT SIDE - PATLI PATTI WALA CONTENT -->
   <div class="flex-1 ml-[270px] p-6">
 
-    <h1 class="text-xl font-extrabold mb-4">Dashboard</h1>
+    <h1 class="text-xl font-extrabold mb-4">ADMIN PANEL</h1>
 
     <div class="space-y-3">
 

@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('content')
 
+@php
+$about = \App\Models\PageSetting::where('page_slug','about')->first();
+@endphp
+
 <!-- Breadcrumb Section start -->
 <div class="breadcrumb-wrapper bg-cover" style="background-image: url('{{ asset('assets/img/breadcrumb-bg.png') }}');">
     <div class="sun-shape"><img src="{{ asset('assets/img/sun.png') }}" alt="shape-image"></div>
@@ -12,9 +16,9 @@
         <div class="page-heading">
             <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
                 <li><a href="{{ url('/') }}">Home</a></li>
-                <li> About US</li>
+                <li> {{ $about->banner_subtitle?? 'About US' }}</li>
             </ul>
-            <h1 class="char-animation">About US</h1>
+            <h1 class="char-animation">{{ $about->banner_title?? 'About US' }}</h1>
         </div>
     </div>
 </div>
@@ -30,7 +34,13 @@
             <div class="row g-4">
                 <div class="col-lg-6">
                     <div class="choose-img-box">
-                        <img class="style-2 img-custom-anim-left" src="{{ asset('assets/img/choose/choose2.jpg') }}" alt="choose-image">
+                        {{-- Dynamic Image --}}
+                        @if($about && $about->image)
+                            <img class="style-2 img-custom-anim-left" src="{{ asset('storage/'.$about->image) }}" alt="about-image">
+                        @else
+                            <img class="style-2 img-custom-anim-left" src="{{ asset('assets/img/choose/choose2.jpg') }}" alt="choose-image">
+                        @endif
+
                         <img class="img-custom-anim-bottom" src="{{ asset('assets/img/choose/choose1.png') }}" alt="choose-image">
                         <div class="img-3"><img class="img-custom-anim-right" src="{{ asset('assets/img/choose/choose3.png') }}" alt="choose-image"></div>
                     </div>
@@ -39,13 +49,31 @@
                     <div class="choose-us-content">
                         <div class="section-title text-left">
                             <span class="sub-title wow fadeInUp" data-wow-delay=".3s">Why Choose Us</span>
-                            <h2 class="char-animation">Where Every <span>Little Step </span> <br> Leads to Big Discoveries</h2>
+                            {{-- Dynamic Title --}}
+                            <h2 class="char-animation">{!! $about->title?? 'Where Every <span>Little Step </span> <br> Leads to Big Discoveries'!!}</h2>
                         </div>
-                        <p class="mt-3 mt-md-0 fadeInUp" data-wow-delay=".5s">Dolor sit amet, consectetur adipiscing elit. Nibh ullamcorper felis arcu elementum. Viverra lectus nullam sagittis nunc imperdiet.</p>
+                        {{-- Dynamic Description --}}
+                        <p class="mt-3 mt-md-0 fadeInUp" data-wow-delay=".5s">
+                            {{ $about->description?? 'Dolor sit amet, consectetur adipiscing elit. Nibh ullamcorper felis arcu elementum. Viverra lectus nullam sagittis nunc imperdiet.' }}
+                        </p>
+
+                        {{-- Mission / Vision from Extra JSON --}}
                         <div class="icon-items wow fadeInUp" data-wow-delay=".6s">
                             <div class="icon"><img src="{{ asset('assets/img/choose/bricks-1.svg') }}" alt="svg-image"></div>
-                            <div class="content"><h3 class="mb-2">Early Learning</h3><p>Kindergarten is an early childhood educational environment where most young children engage in foundational.</p></div>
+                            <div class="content">
+                                <h3 class="mb-2">{{ $about->extra_json['mission_title']?? 'Our Mission' }}</h3>
+                                <p>{{ $about->extra_json['mission_desc']?? 'Kindergarten is an early childhood educational environment where most young children engage in foundational.' }}</p>
+                            </div>
                         </div>
+
+                        <div class="icon-items wow fadeInUp" data-wow-delay=".7s">
+                            <div class="icon"><img src="{{ asset('assets/img/choose/bricks-1.svg') }}" alt="svg-image"></div>
+                            <div class="content">
+                                <h3 class="mb-2">{{ $about->extra_json['vision_title']?? 'Our Vision' }}</h3>
+                                <p>{{ $about->extra_json['vision_desc']?? 'Kindergarten is an early childhood educational environment where most young children engage in foundational.' }}</p>
+                            </div>
+                        </div>
+
                         <div class="progress-wrap wow fadeInUp" data-wow-delay=".7s">
                             <div class="pro-items"><div class="pro-head"><h4 class="title">Creativity</h4><span class="point">90%</span></div><div class="ber-box"><div class="progress"><div class="progress-value"></div></div></div></div>
                             <div class="pro-items"><div class="pro-head"><h4 class="title">Experiences</h4><span class="point">70%</span></div><div class="ber-box style-2"><div class="progress progress-2"><div class="progress-value style-two"></div></div></div></div>
@@ -57,6 +85,8 @@
         </div>
     </div>
 </section>
+
+{{-- Baaki ke sections waise hi rahenge, unko abhi change karne ki zarurat nahi --}}
 
 <!-- Program Section Start -->
 <section class="program-section section-padding pt-0 fix">
@@ -157,36 +187,5 @@
         </div>
     </div>
 </section>
-
-<!-- Conference Section Start -->
-<div class="conference-section">
-    <div class="container">
-        <div class="conference-wrapper zoom-effect-style">
-            <div class="row g-4 align-items-center">
-                <div class="col-xl-4 col-lg-5"><div class="conference-image img-custom-anim-left"><img src="{{ asset('assets/img/confarence/image.jpg') }}" alt="image"></div></div>
-                <div class="col-xl-8 col-lg-7"><div class="section-title mb-0"><span class="sub-title title-two wow fadeInUp">Our Conference</span><h2 class="char-animation text-white">Why would <span> baby school </span> <br> ever be banned worldwide?</h2></div></div>
-            </div>
-            <div class="thumb-icon-box"><div class="thumb-icon"><img src="{{ asset('assets/img/confarence/shape.png') }}" alt="shape-img"><div class="text"><h3>Book a <br> Visit</h3></div></div></div>
-        </div>
-    </div>
-</div>
-
-<!-- News Section Start -->
-<div class="news-section-two section-padding fix">
-    <div class="perasute-shape float-bob-y"><img src="{{ asset('assets/img/news/perasute.png') }}" alt="shape-image"></div>
-    <div class="tubelight-shape"><img src="{{ asset('assets/img/news/tubelight.png') }}" alt="shape-image"></div>
-    <div class="container">
-        <div class="section-title-area"><div class="section-title"><span class="sub-title wow fadeInUp">Our Blog & News</span><h2 class="char-animation">Read <span>Our Latest</span> News</h2></div><p class="wow fadeInUp" data-wow-delay=".3s">Dolor sit amet, consectetur adipiscing elit. Nibh <br> ullamcorper felis arcu elementum.</p></div>
-        <div class="row">
-            <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInLeft" data-wow-delay=".2s"><div class="little-blog-items"><div class="blog-image"><img src="{{ asset('assets/img/news/little-1.jpg') }}" alt="blog-image"></div><div class="blog-content"><p>APR 3, 2026 /<span>Children</span></p><h3><a href="{{ url('/news') }}" class="underline">What to emphasize when you are designing</a></h3></div></div></div>
-            <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInLeft" data-wow-delay=".4s"><div class="little-blog-items color-style-2"><div class="blog-image"><img src="{{ asset('assets/img/news/little-2.jpg') }}" alt="blog-image"></div><div class="blog-content"><p>APR 3, 2026 /<span>Children</span></p><h3><a href="{{ url('/news') }}" class="underline">How to Make Drop-Off Easier for Kids</a></h3></div></div></div>
-            <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInLeft" data-wow-delay=".6s"><div class="little-blog-items color-style-3"><div class="blog-image"><img src="{{ asset('assets/img/news/little-3.jpg') }}" alt="blog-image"></div><div class="blog-content"><p>APR 3, 2026 /<span>Children</span></p><h3><a href="{{ url('/news') }}" class="underline">The Importance of Social Skills in Preschool</a></h3></div></div></div>
-        </div>
-        <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".4s"><div class="news-items-tow"><div class="news-image-tow"><img src="{{ asset('assets/img/news/news6.jpg') }}" alt="news-image"></div><div class="post"><span class="">Learning</span></div><div class="news-content-two"><div class="thumb-icon-box"><div class="thumb-icon"><img src="{{ asset('assets/img/news/circle1.png') }}" alt="shape-image"></div><div class="date"><h3>28</h3><span>jan</span></div></div><div class="author-name"><span><i class="far fa-user"></i> John Smith</span></div><h3><a href="{{ url('/news') }}" class="underline">The Importance of Play in Early Childhood Education</a></h3><p>Dolor sit amet, consectetur adipiscing elit. Nibh ullamcorper as felis arcu as a elementum Dolor sit amet, consectetur adipiscing elit.</p></div></div></div>
-            <div class="col-xl-6 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".6s"><div class="news-items-tow"><div class="news-image-tow"><img src="{{ asset('assets/img/news/news7.jpg') }}" alt="news-image"></div><div class="post"><span class="">Learning</span></div><div class="news-content-two"><div class="thumb-icon-box"><div class="thumb-icon"><img src="{{ asset('assets/img/news/circle1.png') }}" alt="shape-image"></div><div class="date"><h3>28</h3><span>jan</span></div></div><div class="author-name"><span><i class="far fa-user"></i> John Smith</span></div><h3><a href="{{ url('/news') }}" class="underline">Creating a Calm Bedtime Routine for Children</a></h3><p>Dolor sit amet, consectetur adipiscing elit. Nibh ullamcorper as felis arcu as a elementum Dolor sit amet, consectetur adipiscing elit.</p></div></div></div>
-        </div>
-    </div>
-</div>
 
 @endsection
