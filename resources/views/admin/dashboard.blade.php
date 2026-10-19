@@ -37,24 +37,19 @@
         👁️ Pending Review <span class="float-right font-extrabold text-lg">1</span>
       </a>
 
-      
-
-      <!-- ===== ALL WEBSITE PAGES - NEW ADDED ===== -->
+      <!-- ===== ALL WEBSITE PAGES - FIXED ===== -->
       <div class="pt-3 mt-3 border-t-2 border-orange-100">
         <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-2 mb-2">📄 All Website Pages</p>
-        <a href="{{ route('admin.home.settings.index') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50">🏠 Home Page Settings<span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ route('admin.pages.index','about') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50">👨‍👩‍👧‍👦 About Us <span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ route('admin.pages.index','program') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📚 Program <span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ route('admin.pages.index','activities') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎨 Activities <span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ route('admin.pages.index','gallery') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🖼️ Gallery <span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ route('admin.pages.index','admissions') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎓 Admissions <span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ route('admin.pages.index','contact') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📞 Contact Us <span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ route('admin.pages.index','faq') }}" target="_blank" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">❓ FAQ <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/home-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50">🏠 Home Page Settings<span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/about-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50">👨‍👩‍👧‍👦 About Us <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/pages/program') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📚 Program <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/pages/activities') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎨 Activities <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/pages/gallery') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🖼️ Gallery <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/pages/admissions') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎓 Admissions <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/pages/contact') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📞 Contact Us <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/pages/faq') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">❓ FAQ <span class="float-right text-[10px]">↗</span></a>
       </div>
       <!-- ===== END PAGES ===== -->
-
-
-
 
     </div>
 

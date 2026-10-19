@@ -11,10 +11,9 @@
     color: #222 !important;
 }
 
-/* Scroll ke baad - Blue background, white menu (jaise Home page pe hota hai) */
 #header-sticky.sticky,
 .header-1.sticky{
-    background: #0D0643 !important; /* ye wahi blue hai jo home pe aata hai */
+    background: #0D0643 !important; /*  */
 }
 #header-sticky.sticky .main-menu ul li a,
 .header-1.sticky .main-menu ul li a{

@@ -1,9 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-@php
-$about = \App\Models\PageSetting::where('page_slug','about')->first();
-@endphp
+@php $about = \App\Models\AboutSetting::first(); @endphp
 
 <!-- Breadcrumb Section start -->
 <div class="breadcrumb-wrapper bg-cover" style="background-image: url('{{ asset('assets/img/breadcrumb-bg.png') }}');">
@@ -16,9 +14,9 @@ $about = \App\Models\PageSetting::where('page_slug','about')->first();
         <div class="page-heading">
             <ul class="breadcrumb-items wow fadeInUp" data-wow-delay=".3s">
                 <li><a href="{{ url('/') }}">Home</a></li>
-                <li> {{ $about->banner_subtitle?? 'About US' }}</li>
+                <li>About US</li>
             </ul>
-            <h1 class="char-animation">{{ $about->banner_title?? 'About US' }}</h1>
+            <h1 class="char-animation">About US</h1>
         </div>
     </div>
 </div>
@@ -34,43 +32,41 @@ $about = \App\Models\PageSetting::where('page_slug','about')->first();
             <div class="row g-4">
                 <div class="col-lg-6">
                     <div class="choose-img-box">
-                        {{-- Dynamic Image --}}
-                        @if($about && $about->image)
-                            <img class="style-2 img-custom-anim-left" src="{{ asset('storage/'.$about->image) }}" alt="about-image">
-                        @else
-                            <img class="style-2 img-custom-anim-left" src="{{ asset('assets/img/choose/choose2.jpg') }}" alt="choose-image">
-                        @endif
+                        {{-- Image 1 - choose2.jpg --}}
+                        <img class="style-2 img-custom-anim-left" src="{{ $about && $about->image1 ? asset('storage/'.$about->image1) : asset('assets/img/choose/choose2.jpg') }}" alt="choose-image">
 
-                        <img class="img-custom-anim-bottom" src="{{ asset('assets/img/choose/choose1.png') }}" alt="choose-image">
-                        <div class="img-3"><img class="img-custom-anim-right" src="{{ asset('assets/img/choose/choose3.png') }}" alt="choose-image"></div>
+                        {{-- Image 2 - choose1.png --}}
+                        <img class="img-custom-anim-bottom" src="{{ $about && $about->image2 ? asset('storage/'.$about->image2) : asset('assets/img/choose/choose1.png') }}" alt="choose-image">
+
+                        {{-- Image 3 - choose3.png --}}
+                        <div class="img-3">
+                            <img class="img-custom-anim-right" src="{{ $about && $about->image3 ? asset('storage/'.$about->image3) : asset('assets/img/choose/choose3.png') }}" alt="choose-image">
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="choose-us-content">
                         <div class="section-title text-left">
                             <span class="sub-title wow fadeInUp" data-wow-delay=".3s">Why Choose Us</span>
-                            {{-- Dynamic Title --}}
-                            <h2 class="char-animation">{!! $about->title?? 'Where Every <span>Little Step </span> <br> Leads to Big Discoveries'!!}</h2>
+                            <h2 class="char-animation">{!! $about->title ?? 'Where Every <span>Little Step </span> <br> Leads to Big Discoveries' !!}</h2>
                         </div>
-                        {{-- Dynamic Description --}}
                         <p class="mt-3 mt-md-0 fadeInUp" data-wow-delay=".5s">
-                            {{ $about->description?? 'Dolor sit amet, consectetur adipiscing elit. Nibh ullamcorper felis arcu elementum. Viverra lectus nullam sagittis nunc imperdiet.' }}
+                            {{ $about->description ?? 'Dolor sit amet, consectetur adipiscing elit. Nibh ullamcorper felis arcu elementum.' }}
                         </p>
 
-                        {{-- Mission / Vision from Extra JSON --}}
                         <div class="icon-items wow fadeInUp" data-wow-delay=".6s">
                             <div class="icon"><img src="{{ asset('assets/img/choose/bricks-1.svg') }}" alt="svg-image"></div>
                             <div class="content">
-                                <h3 class="mb-2">{{ $about->extra_json['mission_title']?? 'Our Mission' }}</h3>
-                                <p>{{ $about->extra_json['mission_desc']?? 'Kindergarten is an early childhood educational environment where most young children engage in foundational.' }}</p>
+                                <h3 class="mb-2">{{ $about->mission_title ?? 'Our Mission' }}</h3>
+                                <p>{{ $about->mission_desc ?? 'Kindergarten is an early childhood educational environment where most young children engage in foundational.' }}</p>
                             </div>
                         </div>
 
                         <div class="icon-items wow fadeInUp" data-wow-delay=".7s">
                             <div class="icon"><img src="{{ asset('assets/img/choose/bricks-1.svg') }}" alt="svg-image"></div>
                             <div class="content">
-                                <h3 class="mb-2">{{ $about->extra_json['vision_title']?? 'Our Vision' }}</h3>
-                                <p>{{ $about->extra_json['vision_desc']?? 'Kindergarten is an early childhood educational environment where most young children engage in foundational.' }}</p>
+                                <h3 class="mb-2">{{ $about->vision_title ?? 'Our Vision' }}</h3>
+                                <p>{{ $about->vision_desc ?? 'Kindergarten is an early childhood educational environment where most young children engage in foundational.' }}</p>
                             </div>
                         </div>
 
@@ -86,67 +82,6 @@ $about = \App\Models\PageSetting::where('page_slug','about')->first();
     </div>
 </section>
 
-{{-- Baaki ke sections waise hi rahenge, unko abhi change karne ki zarurat nahi --}}
-
-<!-- Program Section Start -->
-<section class="program-section section-padding pt-0 fix">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".2s">
-                <div class="program-box-item style-2">
-                    <div class="top-bar"><img src="{{ asset('assets/img/program/top-1.png') }}" alt="icon-image"></div>
-                    <div class="bottom-bar"><img src="{{ asset('assets/img/program/bottom-1.png') }}" alt="icon-image"></div>
-                    <div class="program-bg"></div>
-                    <div class="program-icon"><img src="{{ asset('assets/img/program/book.png') }}" alt="icon-image"></div>
-                    <div class="program-content"><h3>Toddler</h3><span>(1,5 – 3 years)</span><p>Dolor sit amet, adipiscing elit. Nibh ullamcorper felis arcu elementum.</p><a href="{{ url('/program') }}" class="link-btn">Learn More <i class="icon-arrow-icon"></i></a></div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".4s">
-                <div class="program-box-item">
-                    <div class="top-bar"><img src="{{ asset('assets/img/program/top-2.png') }}" alt="icon-image"></div>
-                    <div class="bottom-bar"><img src="{{ asset('assets/img/program/bottom-2.png') }}" alt="icon-image"></div>
-                    <div class="program-bg bg-2"></div>
-                    <div class="program-icon"><img src="{{ asset('assets/img/program/phone.png') }}" alt="icon-image"></div>
-                    <div class="program-content"><h3>Preschool</h3><span>(2 – 3 years)</span><p>Dolor sit amet, adipiscing elit. Nibh ullamcorper felis arcu elementum.</p><a href="{{ url('/program') }}" class="link-btn">Learn More <i class="icon-arrow-icon"></i></a></div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".6s">
-                <div class="program-box-item style-2">
-                    <div class="top-bar"><img src="{{ asset('assets/img/program/top-3.png') }}" alt="icon-image"></div>
-                    <div class="bottom-bar"><img src="{{ asset('assets/img/program/bottom-3.png') }}" alt="icon-image"></div>
-                    <div class="program-bg bg-3"></div>
-                    <div class="program-icon"><img src="{{ asset('assets/img/program/boy.png') }}" alt="icon-image"></div>
-                    <div class="program-content"><h3>Kindergarten</h3><span>(3 – 4 years)</span><p>Dolor sit amet, adipiscing elit. Nibh ullamcorper felis arcu elementum.</p><a href="{{ url('/program') }}" class="link-btn">Learn More <i class="icon-arrow-icon"></i></a></div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 wow fadeInUp" data-wow-delay=".8s">
-                <div class="program-box-item">
-                    <div class="top-bar"><img src="{{ asset('assets/img/program/top-4.png') }}" alt="icon-image"></div>
-                    <div class="bottom-bar"><img src="{{ asset('assets/img/program/bottom-4.png') }}" alt="icon-image"></div>
-                    <div class="program-bg bg-4"></div>
-                    <div class="program-icon"><img src="{{ asset('assets/img/program/camical-book.png') }}" alt="icon-image"></div>
-                    <div class="program-content"><h3>Pre-K Program</h3><span>(4 – 5 years)</span><p>Dolor sit amet, adipiscing elit. Nibh ullamcorper felis arcu elementum.</p><a href="{{ url('/program') }}" class="link-btn">Learn More <i class="icon-arrow-icon"></i></a></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Brand Section Start -->
-<div class="brand-section section-padding fix">
-    <div class="container">
-        <div class="swiper brand-slider">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><div class="brand-image image-2"><img src="{{ asset('assets/img/brand/brand-01.png') }}" alt="img"></div></div>
-                <div class="swiper-slide"><div class="brand-image image-2"><img src="{{ asset('assets/img/brand/brand-02.png') }}" alt="img"></div></div>
-                <div class="swiper-slide"><div class="brand-image image-2"><img src="{{ asset('assets/img/brand/brand-03.png') }}" alt="img"></div></div>
-                <div class="swiper-slide"><div class="brand-image image-2"><img src="{{ asset('assets/img/brand/brand-04.png') }}" alt="img"></div></div>
-                <div class="swiper-slide"><div class="brand-image image-2"><img src="{{ asset('assets/img/brand/brand-05.png') }}" alt="img"></div></div>
-                <div class="swiper-slide"><div class="brand-image image-2"><img src="{{ asset('assets/img/brand/brand-06.png') }}" alt="img"></div></div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Team Section Start -->
 <div class="team-section-two section-padding pt-0 fix">
@@ -167,25 +102,6 @@ $about = \App\Models\PageSetting::where('page_slug','about')->first();
     </div>
 </div>
 
-<!-- Testimonial Section Start -->
-<section class="testimonial-section-three section-padding fix">
-    <div class="client-one"><img src="{{ asset('assets/img/testimonial/client4.png') }}" alt="client-image"></div>
-    <div class="client-two"><img src="{{ asset('assets/img/testimonial/client5.png') }}" alt="client-image"></div>
-    <div class="client-three"><img src="{{ asset('assets/img/testimonial/client6.png') }}" alt="client-image"></div>
-    <div class="client-four"><img src="{{ asset('assets/img/testimonial/client7.png') }}" alt="client-image"></div>
-    <div class="container">
-        <div class="section-title text-center"><span class="sub-title wow fadeInUp">Our Testimonials</span><h2 class="char-animation text-white">Read &amp; <span>Student’s Parent</span> <br> Testimonials</h2></div>
-        <div class="testimonial-wrapper-3">
-            <div class="swiper testimonial-slider-3">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide"><div class="testimonial-box-area-3"><div class="testimonial-box-3"><div class="client-img"><img src="{{ asset('assets/img/testimonial/client3.png') }}" alt="client-image"></div><div class="testimonial-content-3"><ul class="icon"><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul><p>"Enrolling my daughter at this kindergarten was the best decision we made. From day one, the staff made her feel welcomed, safe, and excited to learn. I’ve seen her vocabulary grow.”</p></div><div class="koma-icon"><img src="{{ asset('assets/img/testimonial/koma4.png') }}" alt="icon-image"></div></div><div class="client-name"><h3>Sarah Taylor</h3><p>Parent of 4-year-old Hana</p></div></div></div>
-                    <div class="swiper-slide"><div class="testimonial-box-area-3"><div class="testimonial-box-3"><div class="client-img"><img src="{{ asset('assets/img/testimonial/client2.png') }}" alt="client-image"></div><div class="testimonial-content-3"><ul class="icon"><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul><p>"Enrolling my daughter at this kindergarten was the best decision we made. From day one, the staff made her feel welcomed, safe, and excited to learn. I’ve seen her vocabulary grow.”</p></div><div class="koma-icon"><img src="{{ asset('assets/img/testimonial/koma4.png') }}" alt="icon-image"></div></div><div class="client-name"><h3>Emily Johnson</h3><p>Parent of 4-year-old Hana</p></div></div></div>
-                    <div class="swiper-slide"><div class="testimonial-box-area-3"><div class="testimonial-box-3"><div class="client-img"><img src="{{ asset('assets/img/testimonial/client4.png') }}" alt="client-image"></div><div class="testimonial-content-3"><ul class="icon"><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul><p>"Enrolling my daughter at this kindergarten was the best decision we made. From day one, the staff made her feel welcomed, safe, and excited to learn. I’ve seen her vocabulary grow.”</p></div><div class="koma-icon"><img src="{{ asset('assets/img/testimonial/koma4.png') }}" alt="icon-image"></div></div><div class="client-name"><h3>Daniel Carter</h3><p>Parent of 4-year-old Hana</p></div></div></div>
-                </div>
-            </div>
-            <div class="array-button testimonial-array"><button class="array-prev"><i class="fal fa-arrow-left"></i></button><button class="array-next"><i class="fal fa-arrow-right"></i></button></div>
-        </div>
-    </div>
-</section>
+
 
 @endsection

@@ -1,56 +1,102 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\HomeSetting;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schema;
 
 class HomeSettingController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $setting = HomeSetting::first();
         return view('admin.home-settings.index', compact('setting'));
     }
 
-    public function store(Request $request){
-        $data = $request->validate([
-            'banner_title' => 'nullable|string|max:255',
-            'banner_subtitle' => 'nullable|string|max:255',
-            'about_title' => 'nullable|string|max:255',
-            'about_description' => 'nullable|string',
-            'banner_image' => 'nullable|image|max:2048',
-            'footer_description' => 'nullable|string',
-            'footer_address' => 'nullable|string',
-            'footer_phone' => 'nullable|string',
-            'footer_email' => 'nullable|string',
-            'footer_facebook' => 'nullable|string',
-            'footer_instagram' => 'nullable|string',
-            'footer_youtube' => 'nullable|string',
-            'footer_copyright' => 'nullable|string',
-            'footer_logo' => 'nullable|image|max:2048',
-        ]);
-
+    public function store(Request $request)
+    {
         $setting = HomeSetting::first();
-
-        if($request->hasFile('banner_image')){
-            if($setting && $setting->banner_image) Storage::disk('public')->delete($setting->banner_image);
-            $data['banner_image'] = $request->file('banner_image')->store('home','public');
-        }
-        if($request->hasFile('footer_logo')){
-            if($setting && $setting->footer_logo) Storage::disk('public')->delete($setting->footer_logo);
-            $data['footer_logo'] = $request->file('footer_logo')->store('home','public');
+        if (!$setting) {
+            $setting = HomeSetting::firstOrCreate(['id' => 1]);
         }
 
-        HomeSetting::updateOrCreate(['id' => 1], $data);
-        return back()->with('success','Updated Successfully!');
+        $extraData = $setting->extra_data ?? [];
+        $allColumns = Schema::getColumnListing('home_settings');
+        
+        // Direct save hone wale columns
+        $directData = [];
+
+        // 1. Text fields handle karo
+        foreach ($request->except(['_token']) as $key => $value) {
+            if ($request->hasFile($key)) {
+                continue; // files ko niche handle karenge
+            }
+            
+            // extra_data me hamesha save karo
+            $extraData[$key] = $value;
+            
+            // Agar ye column table me exist karta hai to direct me bhi save karo
+            if (in_array($key, $allColumns)) {
+                $directData[$key] = $value;
+            }
+        }
+
+        // 2. Image files handle karo
+        foreach ($request->allFiles() as $key => $file) {
+            // Purani image delete karo
+            $oldImage = null;
+            if (isset($extraData[$key])) {
+                $oldImage = $extraData[$key];
+            } elseif (isset($setting->$key) && $setting->$key) {
+                $oldImage = $setting->$key;
+            }
+
+            if ($oldImage) {
+                Storage::disk('public')->delete($oldImage);
+            }
+
+            // Nayi image save karo
+            $path = $file->store('home', 'public');
+            
+            // Dono jagah save - extra_data aur direct
+            $extraData[$key] = $path;
+            if (in_array($key, $allColumns)) {
+                $directData[$key] = $path;
+            }
+        }
+
+        // 3. Final save
+        $directData['extra_data'] = $extraData;
+
+        HomeSetting::updateOrCreate(
+            ['id' => 1],
+            $directData
+        );
+
+        return back()->with('success', 'Home Settings Updated Successfully!');
     }
 
-    public function deleteBanner(){
+    public function deleteBanner()
+    {
         $setting = HomeSetting::first();
-        if($setting && $setting->banner_image){
-            Storage::disk('public')->delete($setting->banner_image);
-            $setting->update(['banner_image' => null]);
+        if ($setting) {
+            if ($setting->banner_image) {
+                Storage::disk('public')->delete($setting->banner_image);
+                $setting->update(['banner_image' => null]);
+            }
+            // extra_data me se bhi hata do
+            if (isset($setting->extra_data['banner_image'])) {
+                $extra = $setting->extra_data;
+                if(isset($extra['banner_image'])){
+                    Storage::disk('public')->delete($extra['banner_image']);
+                    unset($extra['banner_image']);
+                    $setting->update(['extra_data' => $extra]);
+                }
+            }
         }
-        return back()->with('success','Banner hata diya!');
+        return back()->with('success', 'Banner Image Deleted!');
     }
 }

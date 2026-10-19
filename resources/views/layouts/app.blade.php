@@ -31,11 +31,8 @@
         <link rel="stylesheet" href="{{ asset('assets/css/icomon.css') }}">
         <!--<< Main.css >>-->
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-  
-
     </head>
     <body>
-
        <!-- Preloader Start -->
         <div id="preloader" class="preloader">
             <div class="animation-preloader">
@@ -63,13 +60,10 @@
                 </div>
             </div>
         </div>
-
         <!-- Back To Top Start -->
         <button id="back-top" class="back-to-top"><i class="far fa-arrow-up"></i></button>
-
         <div class="mouseCursor cursor-outer"></div>
         <div class="mouseCursor cursor-inner"></div>
-
         <!-- Offcanvas Area Start -->
         <div class="fix-area">
             <div class="offcanvas__info">
@@ -125,28 +119,36 @@
                 </div>
                 <div class="mean__menu-wrapper">
                     <div class="main-menu">
-                        <nav id="mobile-menu">
-                           <ul>
-                                <li><a href="{{ url('/') }}">Home</a></li>
-                                <li><a href="{{ url('/about') }}">{{ $hs->menu_about ?? 'About Us' }}</a></li>
-                                <li><a href="{{ url('/activities') }}">{{ $hs->menu_activities ?? 'Activities' }}</a></li>
-                                <li><a href="{{ url('/admissions') }}">{{ $hs->menu_admissions ?? 'Admission' }}</a></li>
-                                <li><a href="{{ url('/gallery') }}">{{ $hs->menu_gallery ?? 'Gallery' }}</a></li>
-                                <li><a href="{{ url('/contact') }}">{{ $hs->menu_contact ?? 'Contact Us' }}</a></li>
+                     <nav id="mobile-menu">
+   <ul>
+        <li><a href="{{ url('/') }}">Home</a></li>
+        <li><a href="{{ url('/about') }}">{{ $hs->menu_about ?? 'About Us' }}</a></li>
+        <li><a href="{{ url('/activities') }}">{{ $hs->menu_activities ?? 'Activities' }}</a></li>
+        <li><a href="{{ url('/admissions') }}">{{ $hs->menu_admissions ?? 'Admission' }}</a></li>
+        <li><a href="{{ url('/gallery') }}">{{ $hs->menu_gallery ?? 'Gallery' }}</a></li>
+        <li><a href="{{ url('/contact') }}">{{ $hs->menu_contact ?? 'Contact Us' }}</a></li>
 
-                                {{-- Program menu agar chahiye to --}}
-                                @if(!empty($hs->menu_program))
-                                    <li><a href="{{ url('/program') }}">{{ $hs->menu_program }}</a></li>
-                                @endif
+        @if(!empty($hs->menu_program))
+            <li><a href="{{ url('/program') }}">{{ $hs->menu_program }}</a></li>
+        @endif
 
-                                {{-- ADMIN SE ADDED PAGES AUTOMATIC YAHAN AAYENGE --}}
-                                @if(isset($customPages))
-                                    @foreach($customPages as $cpage)
-                                        <li><a href="{{ url('/page/'.$cpage->slug) }}">{{ $cpage->title }}</a></li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </nav>
+        @if(isset($customPages))
+            @foreach($customPages as $cpage)
+                @php
+                    $title = strtolower($cpage->title);
+                    $slug = strtolower($cpage->slug);
+                @endphp
+
+                {{-- Agar title ya slug me terms / privacy / condition shabd hai to skip --}}
+                @if(str_contains($title, 'term') || str_contains($title, 'privacy') || str_contains($title, 'condition') || str_contains($slug, 'term') || str_contains($slug, 'privacy'))
+                    @continue
+                @endif
+
+                <li><a href="{{ url('/page/'.$cpage->slug) }}">{{ $cpage->title }}</a></li>
+            @endforeach
+        @endif
+    </ul>
+</nav>
                     </div>
                 </div>
                 <div class="header-right d-flex justify-content-end align-items-center" style="gap:8px;">
@@ -164,15 +166,12 @@
                             {{ $hs->btn_enquiry_text ?? 'Admin Login' }} <i class="fas fa-lock" style="margin-left:6px; font-size:12px;"></i>
                         </a>
                     @endif
-
                     <div class="header__hamburger my-auto d-xl-none"><div class="sidebar__toggle"><i class="fal fa-bars"></i></div></div>
                 </div>
             </div>
         </div>
     </div>
-</header>
-
-        
+</header>  
         <!--  -->
         @yield('content')
 

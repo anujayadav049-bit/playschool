@@ -5,7 +5,10 @@ use App\Http\Controllers\Admin\AdmissionAdminController;
 use App\Http\Controllers\FormBuilderController;
 use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\Admin\HomeSettingController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\AboutSettingController;
 use App\Models\HomeSetting;
+use App\Models\AboutSetting;
 use Illuminate\Support\Facades\Route;
 
 // --- PUBLIC FORM ROUTES ---
@@ -18,7 +21,11 @@ Route::get('/', function () {
     return view('index', compact('homeSetting')); 
 })->name('home');
 
-Route::get('/about', function () { return view('about'); });
+Route::get('/about', function () { 
+    $about = AboutSetting::first();
+    return view('about', compact('about')); 
+})->name('about');
+
 Route::get('/program', function () { return view('program'); });
 Route::get('/activities', function () { return view('activities'); });
 Route::get('/gallery', function () { return view('gallery'); });
@@ -64,19 +71,22 @@ Route::middleware(['admin'])->prefix('admin')->group(function(){
  Route::post('/custom-pages/{id}/update', [CustomPageController::class, 'update'])->name('admin.custom-pages.update');
  Route::get('/custom-pages/{id}/delete', [CustomPageController::class, 'destroy'])->name('admin.custom-pages.delete');
 
- // HOME SETTINGS - FINAL FIXED (Ye 3 line final hai)
+ // HOME SETTINGS
  Route::get('/home-settings', [HomeSettingController::class,'index'])->name('admin.home.settings.index');
  Route::post('/home-settings', [HomeSettingController::class,'store'])->name('admin.home.settings.store');
  Route::post('/home-settings/delete-banner', [HomeSettingController::class,'deleteBanner'])->name('admin.home.settings.deleteBanner');
+
+ // ABOUT SETTINGS - FIXED - No double admin
+ Route::get('/about-settings', [AboutSettingController::class, 'index'])->name('admin.about.index');
+ Route::post('/about-settings', [AboutSettingController::class, 'update'])->name('admin.about.update');
+
+ // PAGES - OLD SYSTEM - agar chahiye to rakho, nahi to delete kar sakte ho
+ Route::prefix('pages')->name('admin.pages.')->group(function(){
+    Route::get('/', [PageController::class, 'index'])->name('index');
+    Route::get('/{slug}', [PageController::class, 'show'])->name('show');
+    Route::post('/{slug}', [PageController::class, 'update'])->name('update');
+ });
 });
 
 Route::post('/admissions/{id}/status', [AdmissionAdminController::class,'updateStatus'])->name('admin.status');
 Route::get('/page/{slug}', [CustomPageController::class, 'show'])->name('page.show');
-
-// Home Settings (aapka purana wala)
-Route::get('/admin/home-settings', [App\Http\Controllers\Admin\HomeSettingController::class,'index'])->name('admin.home.settings.index');
-Route::post('/admin/home-settings', [App\Http\Controllers\Admin\HomeSettingController::class,'store'])->name('admin.home.settings.store');
-
-// All Other Pages - Ek hi route se sab
-Route::get('/admin/pages/{slug}', [App\Http\Controllers\Admin\PageSettingController::class,'index'])->name('admin.pages.index');
-Route::post('/admin/pages/{slug}', [App\Http\Controllers\Admin\PageSettingController::class,'store'])->name('admin.pages.store');
