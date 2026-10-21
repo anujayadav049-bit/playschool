@@ -83,24 +83,7 @@
 </section>
 
 
-<!-- Team Section Start -->
-<div class="team-section-two section-padding pt-0 fix">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-xl-6"><div class="section-title"><span class="sub-title wow fadeInUp">Our Teacher</span><h2 class="char-animation">Most <span>Dedicated Staff</span> <br> for Your Child</h2><p class="mt-3 wow fadeInUp" data-wow-delay=".3s">Dolor sit amet, consectetur adipiscing elit. Nibh ullamcorper felis arcu <br> elementum. Viverra lectus nullam sagittis nunc imperdiet.</p></div></div>
-            @php $teams = [['team4.jpg','Sarah William'],['team5.jpg','Olivia Brown'],['team6.jpg','James Miller'],['team7.jpg','Sophia Williams'],['team8.jpg','Emily Johnson'],['team9.jpg','Daniel Carter']]; @endphp
-            @foreach($teams as $team)
-            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
-                <div class="team-box">
-                    <div class="team-image"><img src="{{ asset('assets/img/team/'.$team[0]) }}" alt="team-image"></div>
-                    <div class="social-profile"><ul class="social-icon"><li><a href="#"><i class="fab fa-facebook-f"></i></a></li><li><a href="#"><i class="fab fa-instagram"></i></a></li><li><a href="#"><i class="fab fa-linkedin-in"></i></a></li><li><a href="#"><i class="fab fa-twitter"></i></a></li></ul><a href="#" class="share-btn"><i class="fas fa-share-alt"></i></a></div>
-                    <div class="team-content"><h3><a href="{{ url('/team') }}">{{ $team[1] }}</a></h3><p>Online Teacher</p></div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</div>
+
 
 
 

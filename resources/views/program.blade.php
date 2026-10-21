@@ -23,44 +23,36 @@
 <section class="classes-section breadcrumb-classes section-padding fix">
     <div class="container">
         <div class="row g-4">
-            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInRight" data-wow-delay=".5s">
-                <div class="classes-box-item mt-0 box-shadow">
-                    <div class="classes-image"><img src="{{ asset('assets/img/classes/classes1.jpg') }}" alt="classes-image"><div class="date-box"><span><i class="far fa-calendar-alt"></i> Jan 16, 2024</span></div></div>
-                    <div class="classes-content"><div class="location"><span><i class="fa-solid fa-location-dot"></i> 6391 Elgin St. Celina, USA</span></div><h2><a href="{{ url('/program-details') }}">Last Day of School end of Year Picnic</a></h2><div class="classes-rate"><a href="{{ url('/program-details') }}" class="border-btn">Get Ticket<i class="icon-arrow-icon"></i></a><div class="rate"><p>(10 Review)</p><ul><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul></div></div></div>
-                </div>
-            </div>
+            @forelse($programs as $program)
             <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".2s">
-                <div class="classes-box-item mt-0 box-shadow active">
-                    <div class="classes-image"><img src="{{ asset('assets/img/classes/classes2.png') }}" alt="classes-image"><div class="date-box"><span><i class="far fa-calendar-alt"></i> Jan 16, 2024</span></div></div>
-                    <div class="classes-content"><div class="location"><span><i class="fa-solid fa-location-dot"></i> 6391 Elgin St. Celina, USA</span></div><h2><a href="{{ url('/program-details') }}">Spring Garden Exploration Week for Children</a></h2><div class="classes-rate"><a href="{{ url('/program-details') }}" class="border-btn active">Get Ticket<i class="icon-arrow-icon"></i></a><div class="rate"><p>(10 Review)</p><ul><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul></div></div></div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInLeft" data-wow-delay=".5s">
                 <div class="classes-box-item mt-0 box-shadow">
-                    <div class="classes-image"><img src="{{ asset('assets/img/classes/classes3.jpg') }}" alt="classes-image"><div class="date-box"><span><i class="far fa-calendar-alt"></i> Jan 16, 2024</span></div></div>
-                    <div class="classes-content"><div class="location"><span><i class="fa-solid fa-location-dot"></i> 6391 Elgin St. Celina, USA</span></div><h2><a href="{{ url('/program-details') }}">Color Day Creative Festival With Creative Design</a></h2><div class="classes-rate"><a href="{{ url('/program-details') }}" class="border-btn">Get Ticket<i class="icon-arrow-icon"></i></a><div class="rate"><p>(10 Review)</p><ul><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul></div></div></div>
+                    <div class="classes-image">
+                        @if($program->image)
+                            <img src="{{ asset('storage/'.$program->image) }}" alt="{{ $program->title }}">
+                        @else
+                            <img src="{{ asset('assets/img/classes/classes1.jpg') }}" alt="classes-image">
+                        @endif
+                        <div class="date-box">
+                            <span><i class="far fa-calendar-alt"></i> {{ $program->created_at->format('M d, Y') }}</span>
+                        </div>
+                    </div>
+                    <div class="classes-content">
+                        <div class="location">
+                            <span><i class="fa-solid fa-location-dot"></i> {{ $program->age_group ?? '2-6 Years' }}</span>
+                        </div>
+                        <h2><a href="{{ url('/program-details/'.$program->id) }}">{{ $program->title }}</a></h2>
+                        <p style="font-size:13px; color:#666;">{{ Str::limit($program->description, 80) }}</p>
+                        <div class="classes-rate">
+                            <a href="{{ url('/program-details/'.$program->id) }}" class="border-btn">Get Ticket<i class="icon-arrow-icon"></i></a>
+                            <div class="rate"><p>(10 Review)</p><ul><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInRight" data-wow-delay=".7s">
-                <div class="classes-box-item mt-0 box-shadow">
-                    <div class="classes-image"><img src="{{ asset('assets/img/classes/classes01.jpg') }}" alt="classes-image"><div class="date-box"><span><i class="far fa-calendar-alt"></i> Jan 16, 2024</span></div></div>
-                    <div class="classes-content"><div class="location"><span><i class="fa-solid fa-location-dot"></i> 6391 Elgin St. Celina, USA</span></div><h2><a href="{{ url('/program-details') }}">Last Day of School end of Year Picnic</a></h2><div class="classes-rate"><a href="{{ url('/program-details') }}" class="border-btn">Get Ticket<i class="icon-arrow-icon"></i></a><div class="rate"><p>(10 Review)</p><ul><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul></div></div></div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay=".3s">
-                <div class="classes-box-item mt-0 box-shadow">
-                    <div class="classes-image"><img src="{{ asset('assets/img/classes/classes02.jpg') }}" alt="classes-image"><div class="date-box"><span><i class="far fa-calendar-alt"></i> Jan 16, 2024</span></div></div>
-                    <div class="classes-content"><div class="location"><span><i class="fa-solid fa-location-dot"></i> 6391 Elgin St. Celina, USA</span></div><h2><a href="{{ url('/program-details') }}">Last Day of School end of Year Picnic</a></h2><div class="classes-rate"><a href="{{ url('/program-details') }}" class="border-btn">Get Ticket<i class="icon-arrow-icon"></i></a><div class="rate"><p>(10 Review)</p><ul><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul></div></div></div>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInLeft" data-wow-delay=".7s">
-                <div class="classes-box-item mt-0 box-shadow">
-                    <div class="classes-image"><img src="{{ asset('assets/img/classes/classes03.jpg') }}" alt="classes-image"><div class="date-box"><span><i class="far fa-calendar-alt"></i> Jan 16, 2024</span></div></div>
-                    <div class="classes-content"><div class="location"><span><i class="fa-solid fa-location-dot"></i> 6391 Elgin St. Celina, USA</span></div><h2><a href="{{ url('/program-details') }}">Color Day Creative Festival With Creative Design</a></h2><div class="classes-rate"><a href="{{ url('/program-details') }}" class="border-btn">Get Ticket<i class="icon-arrow-icon"></i></a><div class="rate"><p>(10 Review)</p><ul><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li><li><i class="fas fa-star"></i></li></ul></div></div></div>
-                </div>
-            </div>
+            @empty
+            <div class="col-12 text-center"><p>No Programs Added Yet. Please add from Admin Panel.</p></div>
+            @endforelse
         </div>
-        <div class="pagination-wrap"><a href="#" class="wow fadeInUp" data-wow-delay=".2s">01</a><a href="#" class="wow fadeInUp" data-wow-delay=".4s">02</a><span class="wow fadeInUp" data-wow-delay=".6s"><i class="fas fa-arrow-right"></i></span></div>
     </div>
 </section>
  @endsection

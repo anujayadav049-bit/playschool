@@ -23,4 +23,35 @@ class AboutSettingController extends Controller
         $setting->update($data);
         return back()->with('success','About Page Updated!');
     }
+
+
+    
+    // Teacher Add
+    public function storeTeacher(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required|image|max:2048'
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'designation' => $request->designation ?? 'Online Teacher',
+        ];
+
+        if($request->hasFile('image')){
+            $data['image'] = $request->file('image')->store('teachers','public');
+        }
+
+        Teacher::create($data);
+        return back()->with('success','Teacher Added Successfully!');
+    }
+
+    // Teacher Delete
+    public function deleteTeacher($id){
+        $teacher = Teacher::findOrFail($id);
+        // Image delete from storage (optional)
+        // if($teacher->image) Storage::disk('public')->delete($teacher->image);
+        $teacher->delete();
+        return back()->with('success','Teacher Deleted!');
+    }
 }

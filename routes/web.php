@@ -7,8 +7,18 @@ use App\Http\Controllers\CustomPageController;
 use App\Http\Controllers\Admin\HomeSettingController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\AboutSettingController;
+use App\Http\Controllers\Admin\ActivitySettingController;
+use App\Http\Controllers\Admin\ProgramSettingController;
+use App\Http\Controllers\Admin\GallerySettingController;
+use App\Http\Controllers\Admin\ContactSettingController;
+use App\Http\Controllers\Admin\FaqSettingController;
 use App\Models\HomeSetting;
 use App\Models\AboutSetting;
+use App\Models\Teacher;
+use App\Models\Program;
+use App\Models\Activity;
+use App\Models\Gallery;
+use App\Models\Faq;
 use Illuminate\Support\Facades\Route;
 
 // --- PUBLIC FORM ROUTES ---
@@ -22,16 +32,32 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/about', function () { 
-    $about = AboutSetting::first();
-    return view('about', compact('about')); 
+    $setting = AboutSetting::first();
+    $teachers = Teacher::orderBy('id','desc')->get();
+    return view('about', compact('setting','teachers')); 
 })->name('about');
 
-Route::get('/program', function () { return view('program'); });
-Route::get('/activities', function () { return view('activities'); });
-Route::get('/gallery', function () { return view('gallery'); });
+Route::get('/program', function () { 
+    $programs = Program::latest()->get();
+    return view('program', compact('programs')); 
+});
+
+Route::get('/activities', function () { 
+    $activities = Activity::latest()->get();
+    return view('activities', compact('activities')); 
+});
+
+Route::get('/gallery', function () { 
+    $galleries = Gallery::latest()->get();
+    return view('gallery', compact('galleries')); 
+});
+
 Route::get('/admissions', function () { return view('admission'); });
 Route::get('/contact', function () { return view('contact'); });
-Route::get('/faq', function () { return view('faq'); });
+Route::get('/faq', function () { 
+    $faqs = Faq::latest()->get();
+    return view('faq', compact('faqs')); 
+});
 
 // === STUDENT ADMISSION FORM ===
 Route::get('/admissionform', [AdmissionController::class, 'form'])->name('admission.form');
@@ -52,6 +78,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function(){
  Route::get('/admissions/{id}/edit',[AdmissionAdminController::class,'edit'])->name('admin.edit');
  Route::post('/admissions/{id}/update',[AdmissionAdminController::class,'update'])->name('admin.update');
  Route::get('/admissions/{id}/delete',[AdmissionAdminController::class,'destroy'])->name('admin.delete');
+ Route::post('/admissions/{id}/status', [AdmissionAdminController::class,'updateStatus'])->name('admin.status');
  Route::get('/logout',[AuthController::class,'logout'])->name('admin.logout');
 
  Route::prefix('form-builder')->group(function () {
@@ -71,22 +98,42 @@ Route::middleware(['admin'])->prefix('admin')->group(function(){
  Route::post('/custom-pages/{id}/update', [CustomPageController::class, 'update'])->name('admin.custom-pages.update');
  Route::get('/custom-pages/{id}/delete', [CustomPageController::class, 'destroy'])->name('admin.custom-pages.delete');
 
- // HOME SETTINGS
  Route::get('/home-settings', [HomeSettingController::class,'index'])->name('admin.home.settings.index');
  Route::post('/home-settings', [HomeSettingController::class,'store'])->name('admin.home.settings.store');
  Route::post('/home-settings/delete-banner', [HomeSettingController::class,'deleteBanner'])->name('admin.home.settings.deleteBanner');
 
- // ABOUT SETTINGS - FIXED - No double admin
  Route::get('/about-settings', [AboutSettingController::class, 'index'])->name('admin.about.index');
  Route::post('/about-settings', [AboutSettingController::class, 'update'])->name('admin.about.update');
+ Route::post('/about-settings/teacher', [AboutSettingController::class, 'storeTeacher'])->name('admin.about.teacher.store');
+ Route::get('/about-settings/teacher/{id}/delete', [AboutSettingController::class, 'deleteTeacher'])->name('admin.about.teacher.delete');
 
- // PAGES - OLD SYSTEM - agar chahiye to rakho, nahi to delete kar sakte ho
  Route::prefix('pages')->name('admin.pages.')->group(function(){
     Route::get('/', [PageController::class, 'index'])->name('index');
     Route::get('/{slug}', [PageController::class, 'show'])->name('show');
     Route::post('/{slug}', [PageController::class, 'update'])->name('update');
  });
-});
 
-Route::post('/admissions/{id}/status', [AdmissionAdminController::class,'updateStatus'])->name('admin.status');
+ Route::get('/activity-settings', [ActivitySettingController::class,'index'])->name('admin.activity.index');
+ Route::post('/activity-settings', [ActivitySettingController::class,'store'])->name('admin.activity.store');
+ Route::get('/activity-settings/delete/{id}', [ActivitySettingController::class,'delete'])->name('admin.activity.delete');
+
+ Route::get('/program-settings', [ProgramSettingController::class,'index'])->name('admin.program.index');
+ Route::post('/program-settings', [ProgramSettingController::class,'store'])->name('admin.program.store');
+ Route::get('/program-settings/delete/{id}', [ProgramSettingController::class,'delete'])->name('admin.program.delete');
+
+ Route::get('/gallery-settings', [GallerySettingController::class,'index'])->name('admin.gallery.index');
+ Route::post('/gallery-settings', [GallerySettingController::class,'store'])->name('admin.gallery.store');
+ Route::get('/gallery-settings/delete/{id}', [GallerySettingController::class,'delete'])->name('admin.gallery.delete');
+
+ Route::get('/contact-settings', [ContactSettingController::class,'index'])->name('admin.contact.index');
+ Route::post('/contact-settings', [ContactSettingController::class,'update'])->name('admin.contact.update');
+
+ Route::get('/faq-settings', [FaqSettingController::class,'index'])->name('admin.faq.index');
+ Route::post('/faq-settings', [FaqSettingController::class,'store'])->name('admin.faq.store');
+ Route::get('/faq-settings/delete/{id}', [FaqSettingController::class,'delete'])->name('admin.faq.delete');
+});
+Route::get('/fix-gallery-img', function(){
+    \DB::table('galleries')->update(['image' => 'assets/img/logo/logo1.webp']);
+    return 'Images Fixed - Now go to /admin/gallery-settings and re-upload your real photos via Edit';
+});
 Route::get('/page/{slug}', [CustomPageController::class, 'show'])->name('page.show');

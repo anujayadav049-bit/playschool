@@ -8,30 +8,33 @@
 </head>
 <body class="bg-[#FFF8F0]">
 <div class="flex min-h-screen">
+  <!-- LEFT SIDE - SAME AS HOME-SETTINGS -->
   <div class="w-[270px] bg-white border-r-2 border-orange-100 p-4 fixed h-screen overflow-y-auto">
-    <div class="mb-6"><img src="{{ asset('assets/img/logo/logo1.webp') }}" style="height:40px"></div>
+    <div class="mb-6">
+      <img src="{{ asset('assets/img/logo/logo1.webp') }}" style="height:40px">
+    </div>
+      <a href="{{ url('/admin/dashboard') }}" class="block bg-white border px-4 py-3 rounded-xl font-semibold text-[13px]">📊 Dashboard</a>
     <div class="space-y-2">
-      <a href="{{ url('admin/dashboard') }}" class="block bg-white border px-4 py-3 rounded-xl font-bold text-[13px]">📊 Dashboard</a>
-      <div class="pt-3 mt-3 border-t-2 border-orange-100">
-        <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-2 mb-2">📄 ALL WEBSITE PAGES</p>
-        <a href="{{ url('admin/home-settings') }}" class="block bg-[#FF5A00] text-white px-3 py-2 rounded-lg text-[12px] font-bold">🏠 Home Page Settings</a>
-        <a href="{{ url('admin/pages/about') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium mt-1">👨‍👩‍👧‍👦 About Us</a>
-        <a href="{{ url('admin/pages/program') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium mt-1">📚 Program</a>
-        <a href="{{ url('admin/pages/activities') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium mt-1">🎨 Activities</a>
-        <a href="{{ url('admin/pages/gallery') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium mt-1">🖼️ Gallery</a>
-        <a href="{{ url('admin/pages/admissions') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium mt-1">🎓 Admissions</a>
-        <a href="{{ url('admin/pages/contact') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium mt-1">📞 Contact Us</a>
-        <a href="{{ url('admin/pages/faq') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium mt-1">❓ FAQ</a>
-      </div>
+     <div class="pt-3 mt-3 border-t-2 border-orange-100">
+        <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-2 mb-2">📄 All Website Pages</p>
+            <a href="{{ url('admin/home-settings') }}" class="block bg-[#FF5A00] text-white border px-3 py-2 rounded-lg text-[12px] mb-1">🏠Home Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/about-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">👨‍👩‍👧‍👦About Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/program-settings') }}" class="block bg-white  px-3 py-2 rounded-lg text-[12px] mb-1">📚Program Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/activity-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">🎨Activities Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/gallery-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">🖼️Gallery Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/admissions-settings') }}" class="block bg-white  px-3 py-2 rounded-lg text-[12px] mb-1">🎓Admissions Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/contact-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">📞 Contact Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/faq-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">❓FAQ Page<span class="float-right text-[10px]">↗</span></a>
+        </div>
     </div>
     <div class="mt-8 space-y-2">
       <a href="{{ url('/') }}" class="block text-center bg-white border-2 py-2 rounded-full text-[12px] font-bold">← Back to Home</a>
-      <a href="{{ url('admin/logout') }}" class="block text-center bg-red-500 text-white py-2 rounded-full text-[12px] font-bold">Logout</a>
+      <a href="{{ url('/admin/logout') }}" class="block text-center bg-red-500 text-white py-2 rounded-full text-[12px] font-bold">Logout</a>
     </div>
   </div>
 
   <div class="flex-1 ml-[270px] p-6">
-    <h1 class="text-xl font-extrabold mb-4">Home Page Settings</h1>
+    <h1 class="text-xl font-extrabold mb-4">Home Page </h1>
     @if(session('success'))
         <div class="bg-green-100 border text-green-700 px-4 py-2 rounded-xl text-[13px] mb-4">{{ session('success') }}</div>
     @endif
