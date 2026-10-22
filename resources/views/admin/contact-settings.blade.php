@@ -37,11 +37,32 @@
 
 <div class="ml-[270px] flex-1 p-8">
 <h1 class="text-2xl font-bold mb-6">Contact Page Settings</h1>
+
+@if(session('success'))
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">{{ session('success') }}</div>
+@endif
+
 <div class="bg-white p-6 rounded-xl shadow border">
-<form method="POST" action="{{ url('admin/contact-settings') }}">@csrf
-<div class="mb-4"><label class="block font-semibold mb-1">Phone Number</label><input type="text" name="phone" class="w-full border rounded px-3 py-2"></div>
-<div class="mb-4"><label class="block font-semibold mb-1">Email</label><input type="email" name="email" class="w-full border rounded px-3 py-2"></div>
-<div class="mb-4"><label class="block font-semibold mb-1">Address</label><textarea name="address" class="w-full border rounded px-3 py-2" rows="2"></textarea></div>
-<div class="mb-4"><label class="block font-semibold mb-1">Google Map Link</label><input type="text" name="map_link" class="w-full border rounded px-3 py-2"></div>
-<button type="submit" class="bg-[#FF6B2B] text-white px-6 py-2 rounded">Save Contact Info</button>
-</form></div></div></div></body></html>
+<form action="{{ route('admin.contact.store') }}" method="POST">@csrf
+
+<div class="mb-4"><label class="block font-semibold mb-1">Phone Number *</label>
+<input type="text" name="phone" value="{{ $contact->phone ?? $contact->phone ?? '' }}" class="w-full border rounded px-3 py-2" required></div>
+
+<div class="mb-4"><label class="block font-semibold mb-1">Email Address *</label>
+<input type="email" name="email" value="{{ $contact->email ?? '' }}" class="w-full border rounded px-3 py-2" placeholder="playschool@gmail.com" required>
+</div>
+
+<div class="mb-4"><label class="block font-semibold mb-1">Address / Location</label>
+<textarea name="address" class="w-full border rounded px-3 py-2" rows="3" placeholder="Greater Noida, UP 201310, India">{{ $contact->address ?? '' }}</textarea>
+</div>
+
+<div class="mb-4"><label class="block font-semibold mb-1">Google Map Iframe</label>
+<textarea name="map" class="w-full border rounded px-3 py-2" rows="5">{{ $contact->map ?? $contact->map_embed ?? '' }}</textarea></textarea>
+@if(!empty($contact->map_embed))
+<div class="mt-2 p-2 bg-green-50 border rounded text-[12px]">✓ Map Saved</div>
+@endif
+</div>
+
+<button type="submit" class="bg-[#FF6B2B] text-white px-8 py-2 rounded-full font-bold">Save Contact Settings</button>
+</form>
+</div></div></div></body></html>

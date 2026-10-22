@@ -36,7 +36,9 @@
       <a href="{{ url('/admin/admissions?status=pending') }}" class="block bg-white border px-4 py-3 rounded-xl font-semibold text-[13px]">
         👁️ Pending Review <span class="float-right font-extrabold text-lg">1</span>
       </a>
-
+      <a href="{{ url('admin/contact-inquiries') }}" class="block bg-white border px-4 py-3 rounded-xl font-semibold text-[13px] mb-1">
+        📩 Contact Inquiries <span class="float-right font-extrabold text-lg">{{ \App\Models\ContactInquiry::count() }}</span>
+      </a>
       <!-- ===== ALL WEBSITE PAGES - FIXED ===== -->
       <div class="pt-3 mt-3 border-t-2 border-orange-100">
         <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-2 mb-2">📄 All Website Pages</p>

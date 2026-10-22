@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProgramSettingController;
 use App\Http\Controllers\Admin\GallerySettingController;
 use App\Http\Controllers\Admin\ContactSettingController;
 use App\Http\Controllers\Admin\FaqSettingController;
+use App\Http\Controllers\ContactController;
 use App\Models\HomeSetting;
 use App\Models\AboutSetting;
 use App\Models\Teacher;
@@ -19,6 +20,7 @@ use App\Models\Program;
 use App\Models\Activity;
 use App\Models\Gallery;
 use App\Models\Faq;
+use App\Models\ContactSetting;
 use Illuminate\Support\Facades\Route;
 
 // --- PUBLIC FORM ROUTES ---
@@ -43,9 +45,9 @@ Route::get('/program', function () {
 });
 
 Route::get('/activities', function () { 
-    $activities = Activity::latest()->get();
+    $activities = Activity::latest()->take(8)->get();
     return view('activities', compact('activities')); 
-});
+})->name('activities');
 
 Route::get('/gallery', function () { 
     $galleries = Gallery::latest()->get();
@@ -53,11 +55,18 @@ Route::get('/gallery', function () {
 });
 
 Route::get('/admissions', function () { return view('admission'); });
-Route::get('/contact', function () { return view('contact'); });
+
+Route::get('/contact', function () { 
+    $contact = ContactSetting::first();
+    return view('contact', compact('contact')); 
+})->name('contact');
+
 Route::get('/faq', function () { 
     $faqs = Faq::latest()->get();
     return view('faq', compact('faqs')); 
 });
+
+Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
 // === STUDENT ADMISSION FORM ===
 Route::get('/admissionform', [AdmissionController::class, 'form'])->name('admission.form');
@@ -115,6 +124,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function(){
 
  Route::get('/activity-settings', [ActivitySettingController::class,'index'])->name('admin.activity.index');
  Route::post('/activity-settings', [ActivitySettingController::class,'store'])->name('admin.activity.store');
+ Route::post('/activity-settings/update/{id}', [ActivitySettingController::class,'update'])->name('admin.activity.update');
  Route::get('/activity-settings/delete/{id}', [ActivitySettingController::class,'delete'])->name('admin.activity.delete');
 
  Route::get('/program-settings', [ProgramSettingController::class,'index'])->name('admin.program.index');
@@ -126,14 +136,19 @@ Route::middleware(['admin'])->prefix('admin')->group(function(){
  Route::get('/gallery-settings/delete/{id}', [GallerySettingController::class,'delete'])->name('admin.gallery.delete');
 
  Route::get('/contact-settings', [ContactSettingController::class,'index'])->name('admin.contact.index');
- Route::post('/contact-settings', [ContactSettingController::class,'update'])->name('admin.contact.update');
+ Route::post('/contact-settings', [ContactSettingController::class,'store'])->name('admin.contact.store');
 
  Route::get('/faq-settings', [FaqSettingController::class,'index'])->name('admin.faq.index');
  Route::post('/faq-settings', [FaqSettingController::class,'store'])->name('admin.faq.store');
  Route::get('/faq-settings/delete/{id}', [FaqSettingController::class,'delete'])->name('admin.faq.delete');
+
+ // CONTACT INQUIRIES - ADMIN KE ANDAR
+ Route::get('/contact-inquiries', [ContactController::class, 'adminList'])->name('admin.contact-inquiries');
+ Route::delete('/contact-inquiries/{id}', [ContactController::class, 'adminDelete'])->name('admin.contact-inquiries.delete');
 });
-Route::get('/fix-gallery-img', function(){
-    \DB::table('galleries')->update(['image' => 'assets/img/logo/logo1.webp']);
-    return 'Images Fixed - Now go to /admin/gallery-settings and re-upload your real photos via Edit';
-});
+
 Route::get('/page/{slug}', [CustomPageController::class, 'show'])->name('page.show');
+Route::get('/fix-activity-img', function(){
+    \App\Models\Activity::query()->update(['image' => null]);
+    return 'DONE - 8 activities image fixed. Ab admin refresh karo';
+});
