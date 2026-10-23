@@ -5,15 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin Panel</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<style>
+@media (max-width: 768px) {
+  .sidebar-fix { left: -270px !important; transition: 0.3s; z-index: 1001; }
+  .sidebar-fix.active { left: 0 !important; }
+  .content-fix { margin-left: 0 !important; width: 100% !important; padding: 12px !important; }
+  .overlay-fix { display: none; }
+  .overlay-fix.active { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
+}
+</style>
 </head>
 <body class="bg-[#FFF8F0]">
+
+<!-- MOBILE TOP BAR -->
+<div class="md:hidden bg-white p-3 flex justify-between items-center sticky top-0 z-[999] border-b">
+  <img src="{{ asset('assets/img/logo/logo1.webp') }}" style="height:30px">
+  <button onclick="toggleMenu()" class="bg-[#FF5A00] text-white px-4 py-2 rounded-full text-[12px] font-bold">☰ Menu</button>
+</div>
+
+<div class="overlay-fix" id="overlay" onclick="toggleMenu()"></div>
 
 <div class="flex min-h-screen">
 
   <!-- LEFT SIDE - SIDER MENU -->
-  <div class="w-[270px] bg-white border-r-2 border-orange-100 p-4 fixed h-screen overflow-y-auto">
-    <div class="mb-6">
+  <div id="sidebar" class="sidebar-fix w-[270px] bg-white border-r-2 border-orange-100 p-4 fixed h-screen overflow-y-auto">
+    
+    <div class="flex justify-between items-center mb-6">
       <img src="{{ asset('assets/img/logo/logo1.webp') }}" style="height:40px">
+      <button onclick="toggleMenu()" class="md:hidden bg-red-500 text-white w-7 h-7 rounded-full text-[12px]">✕</button>
     </div>
 
     <div class="space-y-2">
@@ -39,6 +58,8 @@
       <a href="{{ url('admin/contact-inquiries') }}" class="block bg-white border px-4 py-3 rounded-xl font-semibold text-[13px] mb-1">
         📩 Contact Inquiries <span class="float-right font-extrabold text-lg">{{ \App\Models\ContactInquiry::count() }}</span>
       </a>
+      <a href="{{ route('admin.admission.enquiries') }}" class="flex justify-between items-center w-full bg-white border-2 border px-4 py-3 rounded-xl font-semibold text-[12px] text-[#1A233A]">📥 Admission Enquiry<span>{{ \App\Models\ContactInquiry::count() }}</span>
+     </a>
       <!-- ===== ALL WEBSITE PAGES - FIXED ===== -->
       <div class="pt-3 mt-3 border-t-2 border-orange-100">
         <p class="text-[10px] font-extrabold text-gray-400 uppercase tracking-widest px-2 mb-2">📄 All Website Pages</p>
@@ -47,12 +68,11 @@
         <a href="{{ url('admin/program-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📚 Program <span class="float-right text-[10px]">↗</span></a>
         <a href="{{ url('admin/activities-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎨 Activities <span class="float-right text-[10px]">↗</span></a>
         <a href="{{ url('admin/gallery-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🖼️ Gallery <span class="float-right text-[10px]">↗</span></a>
-        <a href="{{ url('admin/admissions-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎓 Admissions <span class="float-right text-[10px]">↗</span></a>
+        <a href="{{ url('admin/admission-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">🎓 Admissions <span class="float-right text-[10px]">↗</span></a>
         <a href="{{ url('admin/contact-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">📞 Contact Us <span class="float-right text-[10px]">↗</span></a>
         <a href="{{ url('admin/faq-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] font-medium hover:bg-orange-50 mt-1">❓ FAQ <span class="float-right text-[10px]">↗</span></a>
       </div>
       <!-- ===== END PAGES ===== -->
-
     </div>
 
     <div class="mt-8 space-y-2">
@@ -61,8 +81,8 @@
     </div>
   </div>
 
-  <!-- RIGHT SIDE - PATLI PATTI WALA CONTENT -->
-  <div class="flex-1 ml-[270px] p-6">
+  <!-- RIGHT SIDE - CONTENT -->
+  <div class="content-fix flex-1 ml-[270px] p-6">
 
     <h1 class="text-xl font-extrabold mb-4">ADMIN PANEL</h1>
 
@@ -117,6 +137,13 @@
   </div>
 
 </div>
+
+<script>
+function toggleMenu(){
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('overlay').classList.toggle('active');
+}
+</script>
 
 </body>
 </html>

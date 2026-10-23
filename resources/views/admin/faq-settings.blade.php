@@ -20,9 +20,8 @@
             <a href="{{ url('admin/program-settings') }}" class="block bg-white px-3 py-2 rounded-lg text-[12px] mb-1">📚Program Page<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/activity-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">🎨Activities Page<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/gallery-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">🖼️Gallery Page<span class="float-right text-[10px]">↗</span></a>
-            <a href="{{ url('admin/admissions-settings') }}" class="block bg-white px-3 py-2 rounded-lg text-[12px] mb-1">🎓Admissions Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/admission-settings') }}" class="block bg-white px-3 py-2 rounded-lg text-[12px] mb-1">🎓Admissions Page<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/contact-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">📞 Contact Page<span class="float-right text-[10px]">↗</span></a>
-            <a href="{{ url('admin/contact-inquiries') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">📩 Contact Inquiries<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/faq-settings') }}" class="block bg-[#FF5A00] text-white px-3 py-2 rounded-lg text-[12px] mb-1">❓FAQ Page<span class="float-right text-[10px]">↗</span></a>
         </div>
     </div>
@@ -57,18 +56,81 @@
 <div class="space-y-3">
 @forelse($faqs as $faq)
 <div class="border border-orange-100 bg-[#FFF8F0] p-4 rounded-xl flex justify-between items-start">
-  <div>
+  <div class="flex-1">
     <p class="font-bold text-[14px]">Q{{ $loop->iteration }}. {{ $faq->question }}</p>
     <p class="text-[13px] text-gray-600 mt-2 leading-6">{{ $faq->answer }}</p>
   </div>
-  <form action="{{ route('admin.faq.delete', $faq->id) }}" method="POST" onsubmit="return confirm('Delete?')">@csrf @method('DELETE')
-    <button class="bg-red-500 text-white px-4 py-1 rounded-full text-[11px] font-bold ml-4">Delete</button>
-  </form>
+  <div class="flex gap-2 ml-4">
+    <button onclick="document.getElementById('edit-{{ $faq->id }}').classList.remove('hidden')" class="bg-yellow-500 text-white px-4 py-1 rounded-full text-[11px] font-bold">Edit</button>
+    <form action="{{ url('admin/faq-settings/delete/'.$faq->id) }}" method="POST" onsubmit="return confirm('Delete?')">@csrf @method('DELETE')
+      <button class="bg-red-500 text-white px-4 py-1 rounded-full text-[11px] font-bold">Delete</button>
+    </form>
+  </div>
 </div>
+
+<!-- EDIT MODAL -->
+<div id="edit-{{ $faq->id }}" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl p-6 w-full max-w-[500px]">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="font-bold text-[16px]">Edit FAQ</h3>
+      <button onclick="document.getElementById('edit-{{ $faq->id }}').classList.add('hidden')" class="text-gray-500 font-bold text-xl">&times;</button>
+    </div>
+    <form action="{{ url('admin/faq-settings/update/'.$faq->id) }}" method="POST">
+      @csrf
+      <div class="mb-3">
+        <label class="block font-semibold mb-1 text-[13px]">Question *</label>
+        <input type="text" name="question" value="{{ $faq->question }}" class="w-full border rounded-lg px-3 py-2 text-[13px]" required>
+      </div>
+      <div class="mb-4">
+        <label class="block font-semibold mb-1 text-[13px]">Answer *</label>
+        <textarea name="answer" class="w-full border rounded-lg px-3 py-2 text-[13px]" rows="4" required>{{ $faq->answer }}</textarea>
+      </div>
+      <div class="flex gap-2 justify-end">
+        <button type="button" onclick="document.getElementById('edit-{{ $faq->id }}').classList.add('hidden')" class="bg-gray-200 px-6 py-2 rounded-full font-bold text-[12px]">Cancel</button>
+        <button type="submit" class="bg-[#FF6B2B] text-white px-6 py-2 rounded-full font-bold text-[12px]">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 @empty
 <p class="text-center text-gray-400 py-6">No FAQs added yet</p>
 @endforelse
 </div>
 </div>
 
-</div></div></body></html>
+</div></div>
+<style>
+@media (max-width: 768px) {
+  div[class*="w-[270px]"] { left: -270px !important; transition: 0.3s !important; z-index: 1001 !important; }
+  div[class*="w-[270px]"].active { left: 0 !important; }
+  div[class*="ml-[270px]"] { margin-left: 0 !important; width: 100% !important; padding: 12px !important; }
+  #admin-overlay { display: none; }
+  #admin-overlay.active { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
+}
+</style>
+
+<div id="admin-mobile-bar" class="md:hidden" style="display:none;"></div>
+<div id="admin-overlay" onclick="toggleAdminMenu()"></div>
+
+<script>
+(function(){
+  // Auto find sidebar and content
+  var sidebar = document.querySelector('div[class*="w-[270px]"]');
+  var content = document.querySelector('div[class*="ml-[270px]"]');
+  if(!sidebar) return;
+  
+  // Mobile bar banao
+  var bar = document.getElementById('admin-mobile-bar');
+  if(window.innerWidth <= 768){
+    bar.style.display = 'flex';
+    bar.innerHTML = '<div style="background:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:999;border-bottom:1px solid #eee;width:100%;position:fixed;top:0;left:0;"><img src="/assets/img/logo/logo1.webp" style="height:28px"><button onclick="toggleAdminMenu()" style="background:#FF5A00;color:white;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:bold;border:0;">☰ Menu</button></div><div style="height:52px"></div>';
+    bar.className = '';
+  }
+  window.toggleAdminMenu = function(){
+    sidebar.classList.toggle('active');
+    document.getElementById('admin-overlay').classList.toggle('active');
+  }
+})();
+</script>
+</body></html>

@@ -17,15 +17,27 @@ class FaqSettingController extends Controller
             'question'=>'required',
             'answer'=>'required'
         ]);
-        Faq::create([
-            'question' => $request->question,
-            'answer' => $request->answer
-        ]);
+        Faq::create($request->only('question','answer'));
         return back()->with('success','FAQ Added Successfully!');
     }
 
+    // delete function - ye naam aapki route se match hai
     public function delete($id){
         Faq::findOrFail($id)->delete();
         return back()->with('success','FAQ Deleted!');
+    }
+
+    // destroy alias - agar kahin DELETE method se call ho to
+    public function destroy($id){
+        return $this->delete($id);
+    }
+
+    public function update(Request $request, $id){
+        $request->validate([
+            'question'=>'required',
+            'answer'=>'required'
+        ]);
+        Faq::findOrFail($id)->update($request->only('question','answer'));
+        return back()->with('success','FAQ Updated!');
     }
 }

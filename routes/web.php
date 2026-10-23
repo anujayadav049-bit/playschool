@@ -22,6 +22,7 @@ use App\Models\Gallery;
 use App\Models\Faq;
 use App\Models\ContactSetting;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdmissionSettingController;
 
 // --- PUBLIC FORM ROUTES ---
 Route::get('/form/{slug}', [FormBuilderController::class, 'showForm'])->name('form.show');
@@ -90,6 +91,9 @@ Route::middleware(['admin'])->prefix('admin')->group(function(){
  Route::post('/admissions/{id}/status', [AdmissionAdminController::class,'updateStatus'])->name('admin.status');
  Route::get('/logout',[AuthController::class,'logout'])->name('admin.logout');
 
+ Route::get('/admission-settings', [AdmissionSettingController::class,'index'])->name('admin.admission.index');
+Route::post('/admission-settings', [AdmissionSettingController::class,'update'])->name('admin.admission.update');
+
  Route::prefix('form-builder')->group(function () {
     Route::get('/', [FormBuilderController::class, 'index'])->name('form-builder.index');
     Route::get('/create', [FormBuilderController::class, 'create'])->name('form-builder.create');
@@ -140,7 +144,9 @@ Route::middleware(['admin'])->prefix('admin')->group(function(){
 
  Route::get('/faq-settings', [FaqSettingController::class,'index'])->name('admin.faq.index');
  Route::post('/faq-settings', [FaqSettingController::class,'store'])->name('admin.faq.store');
+ Route::post('/faq-settings/update/{id}', [FaqSettingController::class,'update'])->name('admin.faq.update');
  Route::get('/faq-settings/delete/{id}', [FaqSettingController::class,'delete'])->name('admin.faq.delete');
+ Route::delete('/faq-settings/delete/{id}', [FaqSettingController::class,'delete'])->name('admin.faq.delete.del');
 
  // CONTACT INQUIRIES - ADMIN KE ANDAR
  Route::get('/contact-inquiries', [ContactController::class, 'adminList'])->name('admin.contact-inquiries');
@@ -152,3 +158,8 @@ Route::get('/fix-activity-img', function(){
     \App\Models\Activity::query()->update(['image' => null]);
     return 'DONE - 8 activities image fixed. Ab admin refresh karo';
 });
+
+Route::post('/admission-enquiry-store', [App\Http\Controllers\Admin\AdmissionSettingController::class, 'store'])->name('admission.enquiry.store');
+
+Route::get('/admin/admission-enquiries', [App\Http\Controllers\Admin\AdmissionSettingController::class, 'enquiries'])->name('admin.admission.enquiries');
+Route::delete('/admin/admission-enquiries/{id}', [App\Http\Controllers\Admin\AdmissionSettingController::class, 'destroy'])->name('admin.admission.delete');

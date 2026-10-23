@@ -24,7 +24,7 @@
             <a href="{{ url('admin/program-settings') }}" class="block bg-[#FF5A00] text-white  px-3 py-2 rounded-lg text-[12px] mb-1">📚Program Page<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/activity-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">🎨Activities Page<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/gallery-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">🖼️Gallery Page<span class="float-right text-[10px]">↗</span></a>
-            <a href="{{ url('admin/admissions-settings') }}" class="block bg-white  px-3 py-2 rounded-lg text-[12px] mb-1">🎓Admissions Page<span class="float-right text-[10px]">↗</span></a>
+            <a href="{{ url('admin/admission-settings') }}" class="block bg-white  px-3 py-2 rounded-lg text-[12px] mb-1">🎓Admissions Page<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/contact-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">📞 Contact Page<span class="float-right text-[10px]">↗</span></a>
             <a href="{{ url('admin/faq-settings') }}" class="block bg-white border px-3 py-2 rounded-lg text-[12px] mb-1">❓FAQ Page<span class="float-right text-[10px]">↗</span></a>
         </div>
@@ -115,5 +115,38 @@
 
     </div>
 </div>
+<style>
+@media (max-width: 768px) {
+  div[class*="w-[270px]"] { left: -270px !important; transition: 0.3s !important; z-index: 1001 !important; }
+  div[class*="w-[270px]"].active { left: 0 !important; }
+  div[class*="ml-[270px]"] { margin-left: 0 !important; width: 100% !important; padding: 12px !important; }
+  #admin-overlay { display: none; }
+  #admin-overlay.active { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; }
+}
+</style>
+
+<div id="admin-mobile-bar" class="md:hidden" style="display:none;"></div>
+<div id="admin-overlay" onclick="toggleAdminMenu()"></div>
+
+<script>
+(function(){
+  // Auto find sidebar and content
+  var sidebar = document.querySelector('div[class*="w-[270px]"]');
+  var content = document.querySelector('div[class*="ml-[270px]"]');
+  if(!sidebar) return;
+  
+  // Mobile bar banao
+  var bar = document.getElementById('admin-mobile-bar');
+  if(window.innerWidth <= 768){
+    bar.style.display = 'flex';
+    bar.innerHTML = '<div style="background:white;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:999;border-bottom:1px solid #eee;width:100%;position:fixed;top:0;left:0;"><img src="/assets/img/logo/logo1.webp" style="height:28px"><button onclick="toggleAdminMenu()" style="background:#FF5A00;color:white;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:bold;border:0;">☰ Menu</button></div><div style="height:52px"></div>';
+    bar.className = '';
+  }
+  window.toggleAdminMenu = function(){
+    sidebar.classList.toggle('active');
+    document.getElementById('admin-overlay').classList.toggle('active');
+  }
+})();
+</script>
 </body>
 </html>

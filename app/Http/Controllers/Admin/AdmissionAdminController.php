@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class AdmissionAdminController extends Controller
 {
@@ -15,7 +16,14 @@ class AdmissionAdminController extends Controller
         $approved = Admission::where('status','Approved')->count();
         $rejected = Admission::where('status','Rejected')->count();
         
-        return view('admin.dashboard', compact('total','pending','approved','rejected'));
+        // YEH 2 LINE ADD KI HAI - Isse 2 inquiries dikhega
+        $admissionEnquiryCount = DB::table('admission_enquiries')->count();
+        $contactCount = DB::table('contact_inquiries')->count();
+
+        // Contact table ka naam agar 'contacts' hai to upar wali line ko isse replace karna:
+        // $contactCount = DB::table('contacts')->count();
+
+        return view('admin.dashboard', compact('total','pending','approved','rejected','admissionEnquiryCount','contactCount'));
     }
 
     public function index()

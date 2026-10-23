@@ -1,0 +1,65 @@
+/* ===== FINAL RESPONSIVE FIX - Play School ===== */
+
+/* 1. Website ko kabhi bhi horizontal cut mat karo */
+html, body {
+  max-width: 100%;
+  overflow-x: clip !important;
+}
+
+/* 2. Header - Mobile pe buttons chote */
+@media (max-width: 767px) {
+  .header-1 .header-main {
+    gap: 6px !important;
+    padding: 8px 0 !important;
+  }
+  .header-left img {
+    height: 38px !important;
+    max-width: 140px !important;
+  }
+  .header-right {
+    gap: 6px !important;
+  }
+  .header-right .theme-btn {
+    height: 36px !important;
+    padding: 0 12px !important;
+    font-size: 11px !important;
+    line-height: 36px !important;
+  }
+  .header-right .theme-btn i {
+    font-size: 10px !important;
+    margin-left: 4px !important;
+  }
+  .header__hamburger {
+    margin-left: 4px !important;
+  }
+
+  /* Hero - Welcome card */
+  .hero-section .container, 
+  section .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/* 3. Admin Panel - Mobile pe sidebar upar, content neeche - No scroll */
+@media (max-width: 991px) {
+  body .admin-wrapper,
+  .admin-panel-wrapper {
+    flex-direction: column !important;
+  }
+  /* Agar admin me fixed sidebar hai */
+  aside, .admin-sidebar {
+    width: 100% !important;
+    position: relative !important;
+    height: auto !important;
+  }
+  .admin-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    overflow-x: auto;
+  }
+  /* Admin table scroll ho, page nahi */
+  .admin-content table {
+    min-width: 600px;
+  }
+}

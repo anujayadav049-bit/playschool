@@ -5,6 +5,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        
         <meta name="author" content="modinatheme">
         <meta name="description" content="Play School">
         <!-- ======== Page title ============ -->
@@ -31,6 +32,7 @@
         <link rel="stylesheet" href="{{ asset('assets/css/icomon.css') }}">
         <!--<< Main.css >>-->
         <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/css/responsive-fix.css') }}">
     </head>
     <body>
        <!-- Preloader Start -->
